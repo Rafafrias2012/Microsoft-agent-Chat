@@ -8,10 +8,10 @@ import { IConfig } from './config.js';
 import * as fs from 'fs';
 import { TTSClient } from './tts.js';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { isIP } from 'net';
 import { Database } from './database.js';
 import { MSAgentErrorMessage, MSAgentProtocolMessageType } from '@msagent-chat/protocol';
+import { DiscordLogger } from './discord.js';
 
 let config: IConfig;
 let configPath: string;
@@ -88,7 +88,13 @@ app.get("/api/motd/html", (req, res) => {
     return config.motd.html;
 });
 
-let room = new MSAgentChatRoom(config.chat, config.agents, db, tts);
+// Discord
+let discord = null;
+if (config.discord.enabled) {
+    discord = new DiscordLogger(config.discord);
+}
+
+let room = new MSAgentChatRoom(config.chat, config.agents, db, tts, discord);
 
 app.register(async app => {
     app.get("/api/socket", {websocket: true}, async (socket, req) => {

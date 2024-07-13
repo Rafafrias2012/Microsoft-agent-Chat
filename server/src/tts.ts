@@ -1,7 +1,7 @@
 import path from "path";
 import * as fs from 'fs/promises';
 import { TTSConfig } from "./config.js";
-import { Readable } from "stream";
+import { Readable } from "node:stream";
 import { ReadableStream } from 'node:stream/web';
 import { finished } from "node:stream/promises";
 

@@ -6,7 +6,8 @@ export interface IConfig {
     }
     mysql: MySQLConfig;
     chat: ChatConfig;
-    motd: motdConfig
+    motd: motdConfig;
+    discord: DiscordConfig;
     tts: TTSConfig;
     agents: AgentConfig[];
 }
@@ -51,4 +52,9 @@ export interface MySQLConfig {
     username: string;
     password: string;
     database: string;
+}
+
+export interface DiscordConfig {
+    enabled: boolean;
+    webhookURL: string;
 }

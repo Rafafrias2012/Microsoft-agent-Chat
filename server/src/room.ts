@@ -4,6 +4,7 @@ import { TTSClient } from "./tts.js";
 import { AgentConfig, ChatConfig } from "./config.js";
 import * as htmlentities from 'html-entities';
 import { Database } from "./database.js";
+import { DiscordLogger } from "./discord.js";
 
 export class MSAgentChatRoom {
     agents: AgentConfig[];
@@ -12,13 +13,15 @@ export class MSAgentChatRoom {
     msgId : number = 0;
     config: ChatConfig;
     db: Database;
+    discord: DiscordLogger | null;
 
-    constructor(config: ChatConfig, agents: AgentConfig[], db: Database, tts: TTSClient | null) {
+    constructor(config: ChatConfig, agents: AgentConfig[], db: Database, tts: TTSClient | null, discord: DiscordLogger | null) {
         this.agents = agents;
         this.clients = [];
         this.config = config;
         this.tts = tts;
         this.db = db;
+        this.discord = discord;
     }
 
     addClient(client: Client) {
@@ -79,6 +82,7 @@ export class MSAgentChatRoom {
             for (const _client of this.getActiveClients()) {
                 _client.send(msg);
             }
+            this.discord?.logMsg(client.username!, message);
         });
         client.on('admin', () => {
             let msg: MSAgentPromoteMessage = {

@@ -32,6 +32,10 @@ html = """
 </ol>
 """
 
+[discord]
+enabled = false
+webhookURL = ""
+
 [tts]
 enabled = true
 # https://git.computernewb.com/computernewb/SAPIServer

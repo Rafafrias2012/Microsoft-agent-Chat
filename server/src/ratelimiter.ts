@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events';
-import { RateLimitConfig } from './config';
+import { EventEmitter } from 'node:events';
+import { RateLimitConfig } from './config.js';
 
 // Class to ratelimit a resource (chatting, logging in, etc)
 export default class RateLimiter extends EventEmitter {
