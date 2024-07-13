@@ -102,7 +102,18 @@ export class Client extends EventEmitter {
                     this.socket.close();
                     return;
                 }
-                let username = htmlentities.encode(joinMsg.data.username);
+                let username = joinMsg.data.username.trim();
+                if (!validateUsername(username)) {
+                    let msg: MSAgentErrorMessage = {
+                        op: MSAgentProtocolMessageType.Error,
+                        data: {
+                            error: "Usernames can contain only numbers, letters, spaces, dashes, underscores, and dots, and it must be between 3 and 20 characters."
+                        }
+                    };
+                    await this.send(msg);
+                    this.socket.close();
+                    return;
+                }
                 if (this.room.config.bannedWords.some(w => username.indexOf(w) !== -1)) {
                     this.socket.close();
                     return;
@@ -214,4 +225,12 @@ export class Client extends EventEmitter {
             }
         }
     }
+}
+
+function validateUsername(username: string) {
+    return (
+        username.length >= 3 &&
+        username.length <= 20 &&
+        /^[a-zA-Z0-9\ \-\_\.]+$/.test(username)
+    );
 }
