@@ -62,14 +62,17 @@ export class MSAgentClient {
 		this.users = [];
 		this.admin = false;
 
-		document.addEventListener('keydown', this.loginCb = (e: KeyboardEvent) => {
-			if (e.key === "l" && e.ctrlKey) {
-				e.preventDefault();
-				let password = window.prompt("Papers, please");
-				if (!password) return;
-				this.login(password);
-			}
-		});
+		document.addEventListener(
+			'keydown',
+			(this.loginCb = (e: KeyboardEvent) => {
+				if (e.key === 'l' && e.ctrlKey) {
+					e.preventDefault();
+					let password = window.prompt('Papers, please');
+					if (!password) return;
+					this.login(password);
+				}
+			})
+		);
 	}
 
 	on<E extends keyof MSAgentClientEvents>(event: E, callback: MSAgentClientEvents[E]): Unsubscribe {
@@ -82,13 +85,13 @@ export class MSAgentClient {
 	}
 
 	async getMotd(): Promise<MOTD> {
-		let res = await fetch(this.url + "/api/motd/version");
+		let res = await fetch(this.url + '/api/motd/version');
 		let vs = await res.text();
 		let version = parseInt(vs);
 		if (isNaN(version)) {
-			throw new Error("Version was NaN");
+			throw new Error('Version was NaN');
 		}
-		res = await fetch(this.url + "/api/motd/html");
+		res = await fetch(this.url + '/api/motd/html');
 		let html = await res.text();
 		return {
 			version,
@@ -178,12 +181,12 @@ export class MSAgentClient {
 		ctx.clearItems();
 		// Mute
 		let _user = user;
-		let mute = new ContextMenuItem("Mute", () => {
+		let mute = new ContextMenuItem('Mute', () => {
 			if (_user.muted) {
-				mute.setName("Mute");
+				mute.setName('Mute');
 				_user.muted = false;
 			} else {
-				mute.setName("Unmute");
+				mute.setName('Unmute');
 				_user.muted = true;
 				_user.agent.stopSpeaking();
 				this.playingAudio.get(_user.username)?.pause();
@@ -193,7 +196,7 @@ export class MSAgentClient {
 		// Admin
 		if (this.admin) {
 			// Get IP
-			let getip = new ContextMenuItem("Get IP", () => {
+			let getip = new ContextMenuItem('Get IP', () => {
 				let msg: MSAgentAdminGetIPMessage = {
 					op: MSAgentProtocolMessageType.Admin,
 					data: {
@@ -205,7 +208,7 @@ export class MSAgentClient {
 			});
 			ctx.addItem(getip);
 			// Kick
-			let kick = new ContextMenuItem("Kick", () => {
+			let kick = new ContextMenuItem('Kick', () => {
 				let msg: MSAgentAdminKickMessage = {
 					op: MSAgentProtocolMessageType.Admin,
 					data: {
@@ -217,7 +220,7 @@ export class MSAgentClient {
 			});
 			ctx.addItem(kick);
 			// Ban
-			let ban = new ContextMenuItem("Ban", () => {
+			let ban = new ContextMenuItem('Ban', () => {
 				let msg: MSAgentAdminBanMessage = {
 					op: MSAgentProtocolMessageType.Admin,
 					data: {
@@ -264,7 +267,7 @@ export class MSAgentClient {
 				this.charlimit = initMsg.data.charlimit;
 				for (let _user of initMsg.data.users) {
 					let agent = await agentCreateCharacterFromUrl(this.url + '/api/agents/' + _user.agent);
-                    agent.setUsername(_user.username, _user.admin ? "#FF0000" : "#000000");
+					agent.setUsername(_user.username, _user.admin ? '#FF0000' : '#000000');
 					agent.addToDom(this.agentContainer);
 					agent.show();
 					let user = new User(_user.username, agent);
@@ -277,7 +280,7 @@ export class MSAgentClient {
 			case MSAgentProtocolMessageType.AddUser: {
 				let addUserMsg = msg as MSAgentAddUserMessage;
 				let agent = await agentCreateCharacterFromUrl(this.url + '/api/agents/' + addUserMsg.data.agent);
-                agent.setUsername(addUserMsg.data.username, "#000000");
+				agent.setUsername(addUserMsg.data.username, '#000000');
 				agent.addToDom(this.agentContainer);
 				agent.show();
 				let user = new User(addUserMsg.data.username, agent);
@@ -292,7 +295,7 @@ export class MSAgentClient {
 				if (!user) return;
 				user.agent.hide(true);
 				if (this.playingAudio.has(user!.username)) {
-                    this.playingAudio.get(user!.username)?.pause();
+					this.playingAudio.get(user!.username)?.pause();
 					this.playingAudio.delete(user!.username);
 				}
 				this.users.splice(this.users.indexOf(user), 1);
@@ -317,10 +320,10 @@ export class MSAgentClient {
 					audio.addEventListener('ended', () => {
 						// give a bit of time before the wordballoon disappears
 						setTimeout(() => {
-                            if (this.playingAudio.get(user!.username) === audio) {
-							    user!.agent.stopSpeaking();
-						        this.playingAudio.delete(user!.username);
-                            }
+							if (this.playingAudio.get(user!.username) === audio) {
+								user!.agent.stopSpeaking();
+								this.playingAudio.delete(user!.username);
+							}
 						}, 1000);
 					});
 
@@ -338,7 +341,7 @@ export class MSAgentClient {
 							this.admin = true;
 							for (const user of this.users) this.setContextMenu(user);
 						} else {
-							alert("Incorrect password!");
+							alert('Incorrect password!');
 						}
 						break;
 					}
@@ -352,10 +355,10 @@ export class MSAgentClient {
 			}
 			case MSAgentProtocolMessageType.Promote: {
 				let promoteMsg = msg as MSAgentPromoteMessage;
-				let user = this.users.find(u => u.username === promoteMsg.data.username);
+				let user = this.users.find((u) => u.username === promoteMsg.data.username);
 				if (!user) return;
 				user.admin = true;
-				user.agent.setUsername(user.username, "#ff0000");
+				user.agent.setUsername(user.username, '#ff0000');
 				break;
 			}
 			case MSAgentProtocolMessageType.Error: {

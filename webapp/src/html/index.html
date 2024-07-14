@@ -1,130 +1,130 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" prefix="og: https://ogp.me/ns#">
-    <head>
-        <title>MSAgent Chat</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="MSAgent Chat" />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Computernewb's Internet Pub Hub" />
-        <link rel="stylesheet" href="https://unpkg.com/98.css" />
-        <link type="text/css" rel="stylesheet" href="../css/style.scss" />
-    </head>
-    <body>
-        <div id="logonView">
-            <div class="window" id="logonWindow">
-                <div class="title-bar">
-                    <div class="title-bar-text">Log on to Agent Chat</div>
-                </div>
-                <div class="window-body">
-                    <div id="logonWindowLogo">
-                        <img src="../../assets/agentchat.png?width=361&height=82"/>
-                    </div>
-                    <form id="logonForm">
-                        <div id="logonUsernameContainer">
-                            <label for="logonUsername">User name:</label>
-                            <input type="text" id="logonUsername" required/>
-                        </div>
-                        <div id="logonRoomContainer">
-                            <label for="logonRoom">Room name:</label>
-                            <input type="text" id="logonRoom" placeholder="Coming Soon" disabled/>
-                        </div>
-                        <div id="logonButtonsContainer">
-                            <select id="agentSelect">
-                                <option value="" disabled selected hidden>Agent</option>
-                            </select>
-                            <button type="submit" id="logonButton">Log on</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+	<head>
+		<title>MSAgent Chat</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta property="og:title" content="MSAgent Chat" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Computernewb's Internet Pub Hub" />
+		<link rel="stylesheet" href="https://unpkg.com/98.css" />
+		<link type="text/css" rel="stylesheet" href="../css/style.scss" />
+	</head>
+	<body>
+		<div id="logonView">
+			<div class="window" id="logonWindow">
+				<div class="title-bar">
+					<div class="title-bar-text">Log on to Agent Chat</div>
+				</div>
+				<div class="window-body">
+					<div id="logonWindowLogo">
+						<img src="../../assets/agentchat.png?width=361&height=82" />
+					</div>
+					<form id="logonForm">
+						<div id="logonUsernameContainer">
+							<label for="logonUsername">User name:</label>
+							<input type="text" id="logonUsername" required />
+						</div>
+						<div id="logonRoomContainer">
+							<label for="logonRoom">Room name:</label>
+							<input type="text" id="logonRoom" placeholder="Coming Soon" disabled />
+						</div>
+						<div id="logonButtonsContainer">
+							<select id="agentSelect">
+								<option value="" disabled selected hidden>Agent</option>
+							</select>
+							<button type="submit" id="logonButton">Log on</button>
+						</div>
+					</form>
+				</div>
+			</div>
 
-            <div class="window" id="motdWindow">
-                <div class="title-bar">
-                    <div class="title-bar-text">
-                        Welcome to Agent Chat
-                    </div>
-                    <div class="title-bar-controls">
-                        <button aria-label="Close"></button>
-                    </div>
-                </div>
-                <div class="window-body">
-                    <div id="motdContainer"></div>
-                </div>
-            </div>
+			<div class="window" id="motdWindow">
+				<div class="title-bar">
+					<div class="title-bar-text">Welcome to Agent Chat</div>
+					<div class="title-bar-controls">
+						<button aria-label="Close"></button>
+					</div>
+				</div>
+				<div class="window-body">
+					<div id="motdContainer"></div>
+				</div>
+			</div>
 
-            <ul id="bottomLinks">
-                <li><a href="#" id="rulesLink">Rules</a></li><li><a target="blank" href="https://discord.gg/a4kqb4mGyX">Discord</a></li><li><a target="blank" href="https://git.computernewb.com/computernewb/msagent-chat">Source Code</a></li>
-            </ul>
-        </div>
-        <div id="chatView">
-            <div class="window" id="roomSettingsWindow">
-                <div class="title-bar">
-                    <div class="title-bar-text">Room Settings</div>
-                    <div class="title-bar-controls">
-                        <button aria-label="Minimize"></button>
-                        <button aria-label="Close"></button>
-                    </div>
-                </div>
-                <div class="window-body" id="roomSettingsBody">
-                    <menu role="tablist">
-                        <li role="tab" aria-selected="true"><a>Wallpaper</a></li>
-                    </menu>
-                    <div class="window" role="tabpanel" id="roomSettingsTabContent">
-                        <div class="window-body" id="roomSettingsWallpaperTab">
-                            <div class="wallpaperMonitor">
-                                <div>
-                                    <div class="wallpaperMonitorFg" id="roomWallpaperPreview"></div>
-                                    <img src="../../assets/monitor.png"/>
-                                </div>
-                            </div>
-                            <div>
-                                <span>Select a picture or enter a URL to use as a wallpaper:</span>
-                                <div id="roomSettingsWallpaperSelect">
-                                    <div class="mainCol">
-                                        <ul class="tree-view">
-                                            <!-- Should be actual links later but this is just a mockup for now :P -->
-                                            <li>None</li>
-                                            <li>Blue Lace 16</li>
-                                            <li>Boiling Point</li>
-                                            <li>Chateau</li>
-                                            <li>Coffee Bean</li>
-                                            <li>Fall Memories</li>
-                                            <li>FeatherTexture</li>
-                                        </ul>
-                                        <input type="text" placeholder="Wallpaper URL" id="roomSettingsWallpaperURL"/>
-                                    </div>
-                                    <div>
-                                        <div class="field-row-stacked">
-                                            <label for="roomSettingsWallpaperDisplay">Picture Display:</label>
-                                            <select id="roomSettingsWallpaperDisplay">
-                                                <option selected>Center</option>
-                                                <option>Tile</option>
-                                                <option>Stretch</option>
-                                            </select>
-                                        </div>
-                                        <div class="field-row">
-                                            <!-- *Should* be a HTML color select, but 98.css doesn't support those grr -->
-                                            <button>Color</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field-row fieldRowRight">
-                        <button>OK</button>
-                        <button>Cancel</button>
-                        <button>Apply</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="chatBar">
-                <input type="text" id="chatInput" placeholder="Send a message"/>
-                <button id="chatSendBtn">Send</button>
-            </div>
-        </div>
-        <script type="module" src="../ts/main.ts"></script>
-    </body>
+			<ul id="bottomLinks">
+				<li><a href="#" id="rulesLink">Rules</a></li>
+				<li><a target="blank" href="https://discord.gg/a4kqb4mGyX">Discord</a></li>
+				<li><a target="blank" href="https://git.computernewb.com/computernewb/msagent-chat">Source Code</a></li>
+			</ul>
+		</div>
+		<div id="chatView">
+			<div class="window" id="roomSettingsWindow">
+				<div class="title-bar">
+					<div class="title-bar-text">Room Settings</div>
+					<div class="title-bar-controls">
+						<button aria-label="Minimize"></button>
+						<button aria-label="Close"></button>
+					</div>
+				</div>
+				<div class="window-body" id="roomSettingsBody">
+					<menu role="tablist">
+						<li role="tab" aria-selected="true"><a>Wallpaper</a></li>
+					</menu>
+					<div class="window" role="tabpanel" id="roomSettingsTabContent">
+						<div class="window-body" id="roomSettingsWallpaperTab">
+							<div class="wallpaperMonitor">
+								<div>
+									<div class="wallpaperMonitorFg" id="roomWallpaperPreview"></div>
+									<img src="../../assets/monitor.png" />
+								</div>
+							</div>
+							<div>
+								<span>Select a picture or enter a URL to use as a wallpaper:</span>
+								<div id="roomSettingsWallpaperSelect">
+									<div class="mainCol">
+										<ul class="tree-view">
+											<!-- Should be actual links later but this is just a mockup for now :P -->
+											<li>None</li>
+											<li>Blue Lace 16</li>
+											<li>Boiling Point</li>
+											<li>Chateau</li>
+											<li>Coffee Bean</li>
+											<li>Fall Memories</li>
+											<li>FeatherTexture</li>
+										</ul>
+										<input type="text" placeholder="Wallpaper URL" id="roomSettingsWallpaperURL" />
+									</div>
+									<div>
+										<div class="field-row-stacked">
+											<label for="roomSettingsWallpaperDisplay">Picture Display:</label>
+											<select id="roomSettingsWallpaperDisplay">
+												<option selected>Center</option>
+												<option>Tile</option>
+												<option>Stretch</option>
+											</select>
+										</div>
+										<div class="field-row">
+											<!-- *Should* be a HTML color select, but 98.css doesn't support those grr -->
+											<button>Color</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="field-row fieldRowRight">
+						<button>OK</button>
+						<button>Cancel</button>
+						<button>Apply</button>
+					</div>
+				</div>
+			</div>
+
+			<div id="chatBar">
+				<input type="text" id="chatInput" placeholder="Send a message" />
+				<button id="chatSendBtn">Send</button>
+			</div>
+		</div>
+		<script type="module" src="../ts/main.ts"></script>
+	</body>
 </html>

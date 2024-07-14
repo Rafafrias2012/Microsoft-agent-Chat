@@ -108,7 +108,7 @@ export class RGBAColor {
 		//quad.g = (val & 0x00ff0000) >> 16;
 		//quad.b = (val & 0x0000ff00) >> 8;
 
-		quad.r = (val & 0x000000ff);
+		quad.r = val & 0x000000ff;
 		quad.g = (val & 0x0000ff00) >> 8;
 		quad.b = (val & 0x00ff0000) >> 16;
 

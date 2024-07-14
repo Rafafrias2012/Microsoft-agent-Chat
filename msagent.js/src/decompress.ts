@@ -14,15 +14,13 @@ export async function compressInit() {
 	compressWasm = await WebAssembly.instantiateStreaming(fetch(url));
 }
 
-
 function compressWasmGetExports() {
-	return (compressWasm.instance.exports as any) as CompressWasmExports;
+	return compressWasm.instance.exports as any as CompressWasmExports;
 }
 
-function compressWASMGetMemory() : WebAssembly.Memory {
+function compressWASMGetMemory(): WebAssembly.Memory {
 	return compressWasmGetExports().memory;
 }
-
 
 // debugging
 //(window as any).DEBUGcompressGetWASM = () => {
@@ -35,10 +33,10 @@ export function compressDecompress(src: Uint8Array, dest: Uint8Array) {
 	// Grow the WASM heap if needed. Funnily enough, this code is never hit in most
 	// ACSes, so IDK if it's even needed
 	let memory = compressWASMGetMemory();
-	if(memory.buffer.byteLength < src.length + dest.length) {
+	if (memory.buffer.byteLength < src.length + dest.length) {
 		// A WebAssembly page is 64kb, so we need to grow at least that much
 		let npages = Math.floor((src.length + dest.length) / 65535) + 1;
-		console.log("Need to grow WASM heap", npages, "pages", "(current byteLength is", memory.buffer.byteLength, ", we need", src.length + dest.length, ")");
+		console.log('Need to grow WASM heap', npages, 'pages', '(current byteLength is', memory.buffer.byteLength, ', we need', src.length + dest.length, ')');
 		memory.grow(npages);
 	}
 
@@ -50,8 +48,7 @@ export function compressDecompress(src: Uint8Array, dest: Uint8Array) {
 	// Call the WASM compression routine
 	let nrBytesDecompressed = compressWasmGetExports().agentDecompressWASM(0, src.length, src.length, dest.length);
 
-	if(nrBytesDecompressed != dest.length)
-		throw new Error(`decompression failed: ${nrBytesDecompressed} != ${dest.length}`);
+	if (nrBytesDecompressed != dest.length) throw new Error(`decompression failed: ${nrBytesDecompressed} != ${dest.length}`);
 
 	// Dest will be memory[src.length..dest.length]
 	dest.set(copyBuffer.slice(src.length, src.length + dest.length), 0);

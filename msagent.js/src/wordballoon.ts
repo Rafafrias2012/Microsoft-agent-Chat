@@ -5,7 +5,6 @@ let corner_sprite: HTMLImageElement;
 let straight_sprite: HTMLImageElement;
 let tip_sprite: HTMLImageElement;
 
-
 // Call *once* to initalize the wordballoon drawing system.
 // Do not call other wordballoon* functions WITHOUT doing so.
 export async function wordballoonInit() {
@@ -68,7 +67,7 @@ export function wordballoonDraw(ctx: CanvasRenderingContext2D, at: Point, size: 
 	spriteDrawRotated(ctx, corner_sprite, 90, at.x + 12 * i, at.y);
 
 	// Draw both the left and right sides of the box. We can do this in one pass
-    // so we do that for simplicity.
+	// so we do that for simplicity.
 	let j = 1;
 	for (; j < size.h / 12; ++j) {
 		spriteDrawRotated(ctx, straight_sprite, 270, at.x, at.y + 12 * j);
@@ -89,12 +88,11 @@ export function wordballoonDraw(ctx: CanvasRenderingContext2D, at: Point, size: 
 
 	// TODO: a tip point should be provided. We will pick the best corner to stick it on,
 	// and the best y coordinate on that corner to stick it on.
-    //
-    // For now, we always simply use the center of the bottom..
+	//
+	// For now, we always simply use the center of the bottom..
 
 	// Draw the tip.
-	if (hasTip)
-		spriteDraw(ctx, tip_sprite, at.x + size.w / 2, at.y + 12 * (j + 1) - 1);
+	if (hasTip) spriteDraw(ctx, tip_sprite, at.x + size.w / 2, at.y + 12 * (j + 1) - 1);
 
 	ctx.restore();
 
@@ -109,7 +107,7 @@ export function wordballoonDraw(ctx: CanvasRenderingContext2D, at: Point, size: 
 
 function wordWrapToStringList(text: string, maxLength: number) {
 	// this was stolen off stackoverflow, it sucks but it (kind of) works
-    // it should probably be replaced at some point.
+	// it should probably be replaced at some point.
 	var result = [],
 		line: string[] = [];
 	var length = 0;
@@ -129,7 +127,7 @@ function wordWrapToStringList(text: string, maxLength: number) {
 }
 
 // This draws a wordballoon with text. This function respects the current context's font settings and does *not* modify them.
-export function wordballoonDrawText(ctx: CanvasRenderingContext2D, at: Point, text: string, maxLen: number = 20, hasTip: boolean = true, color: string = "#000000"): Rect {
+export function wordballoonDrawText(ctx: CanvasRenderingContext2D, at: Point, text: string, maxLen: number = 20, hasTip: boolean = true, color: string = '#000000'): Rect {
 	let lines = wordWrapToStringList(text, maxLen);
 
 	// Create metrics for each line
@@ -158,10 +156,10 @@ export function wordballoonDrawText(ctx: CanvasRenderingContext2D, at: Point, te
 	size.w = Math.floor(size.w + 12);
 	size.h = Math.floor(size.h);
 
-    // Draw the word balloon and get the inner rect
+	// Draw the word balloon and get the inner rect
 	let rectInner = wordballoonDraw(ctx, at, size, hasTip);
 
-    // Draw all the lines of text
+	// Draw all the lines of text
 	let y = 0;
 	for (let i in lines) {
 		let metric = metrics[i];
@@ -175,7 +173,7 @@ export function wordballoonDrawText(ctx: CanvasRenderingContext2D, at: Point, te
 	return {
 		x: at.x,
 		y: at.y,
-		w: rectInner.w + (12*3) + 12,
-		h: rectInner.h + (13*3) + 18
-	}
+		w: rectInner.w + 12 * 3 + 12,
+		h: rectInner.h + 13 * 3 + 18
+	};
 }

@@ -29,17 +29,17 @@ export class AcsImage {
 			image.data = data;
 		}
 
-        let temp = COMPRESSED_DATABLOCK.read(buffer);
+		let temp = COMPRESSED_DATABLOCK.read(buffer);
 		let tempBuffer = new BufferStream(temp.data);
 
 		image.regionData = RGNDATA.read(tempBuffer);
 
-        return image;
+		return image;
 	}
 }
 
 export class AcsImageEntry {
-    image = new AcsImage();
+	image = new AcsImage();
 
 	static read(buffer: BufferStream) {
 		let image = new AcsImageEntry();
@@ -48,9 +48,9 @@ export class AcsImageEntry {
 		let loc = LOCATION.read(buffer);
 		let checksum = buffer.readU32LE();
 
-        buffer.withOffset(loc.offset, () => {
-            image.image = AcsImage.read(buffer);
-        });
+		buffer.withOffset(loc.offset, () => {
+			image.image = AcsImage.read(buffer);
+		});
 
 		return image;
 	}

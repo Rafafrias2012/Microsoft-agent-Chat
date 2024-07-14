@@ -115,14 +115,14 @@ class AgentWordBalloonState {
 
 	positionUpdated() {
 		let size = this.char.getSize();
-		this.balloonCanvas.style.left = -((this.balloonCanvas.width / 2) - (size.w / 2)) + 'px';
+		this.balloonCanvas.style.left = -(this.balloonCanvas.width / 2 - size.w / 2) + 'px';
 		switch (this.position) {
 			case AgentWordBalloonPosition.AboveCentered: {
-				this.balloonCanvas.style.top = -(this.balloonCanvas.height) + 'px';
+				this.balloonCanvas.style.top = -this.balloonCanvas.height + 'px';
 				break;
 			}
 			case AgentWordBalloonPosition.BelowCentered: {
-				this.balloonCanvas.style.bottom = -(this.balloonCanvas.height) + 'px';
+				this.balloonCanvas.style.bottom = -this.balloonCanvas.height + 'px';
 				break;
 			}
 		}
@@ -307,8 +307,8 @@ export class Agent {
 		if (this.wordballoonState != null) {
 			this.stopSpeaking();
 		}
-		
-		this.wordballoonState = new AgentWordBalloonState(this, text, true, AgentWordBalloonPosition.AboveCentered, "#000000");
+
+		this.wordballoonState = new AgentWordBalloonState(this, text, true, AgentWordBalloonPosition.AboveCentered, '#000000');
 		this.wordballoonState.positionUpdated();
 		this.wordballoonState.show();
 	}

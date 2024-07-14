@@ -35,7 +35,6 @@ export function agentCharacterParseACS(buffer: BufferStream): AcsData {
 	let imageInfoLocation = LOCATION.read(buffer);
 	let audioInfoLocation = LOCATION.read(buffer);
 
-
 	buffer.withOffset(characterInfoLocation.offset, () => {
 		acsData.characterInfo = AcsCharacterInfo.read(buffer);
 	});
@@ -59,9 +58,9 @@ export function agentCreateCharacter(data: AcsData): Agent {
 	return new Agent(data);
 }
 
-export async function agentCreateCharacterFromUrl(url: string) : Promise<Agent> {
+export async function agentCreateCharacterFromUrl(url: string): Promise<Agent> {
 	// just return the cache object
-	if(acsDataCache.has(url)) {
+	if (acsDataCache.has(url)) {
 		return agentCreateCharacter(acsDataCache.get(url)!);
 	} else {
 		let res = await fetch(url);
