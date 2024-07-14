@@ -119,3 +119,10 @@ function talk() {
 }
 
 roomInit();
+
+
+let w = window as any;
+
+w.agentchat = {
+	getRoom: () => Room,
+}
