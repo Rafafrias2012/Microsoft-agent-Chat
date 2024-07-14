@@ -51,7 +51,6 @@ export class MSAgentClient {
 	private charlimit: number = 0;
 	private admin: boolean;
 	private loginCb: (e: KeyboardEvent) => void;
-	private currentMsgId: number = 0;
 
 	private username: string | null = null;
 	private agentContainer: HTMLElement;
@@ -345,12 +344,12 @@ export class MSAgentClient {
 
 					this.playingAudio.set(user!.username, audio);
 
-					let msgId = ++this.currentMsgId;
+					let msgId = ++user!.msgId;
 
 					audio.addEventListener('ended', () => {
 						// give a bit of time before the wordballoon disappears
 						setTimeout(() => {
-							if (this.currentMsgId === msgId) {
+							if (user!.msgId === msgId) {
 								user!.agent.stopSpeaking();
 								this.playingAudio.delete(user!.username);
 							}
@@ -367,12 +366,12 @@ export class MSAgentClient {
 				let user = this.users.find((u) => u.username === imgMsg.data.username);
 				if (!user || user.muted) return;
 				let img = new Image();
-				let msgId = ++this.currentMsgId;
+				let msgId = ++user!.msgId;
 				img.addEventListener('load', () => {
 					this.playingAudio.get(user.username)?.pause();
 					user.agent.speakImage(img);
 					setTimeout(() => {
-						if (this.currentMsgId === msgId) {
+						if (user!.msgId === msgId) {
 							user.agent.stopSpeaking();
 						}
 					}, 5000);

@@ -5,6 +5,7 @@ export class User {
 	agent: Agent;
 	muted: boolean;
 	admin: boolean;
+	msgId: number = 0;
 
 	constructor(username: string, agent: Agent) {
 		this.username = username;
