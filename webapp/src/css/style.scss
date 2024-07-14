@@ -1,0 +1,251 @@
+body {
+	background-color: #3a6ea5;
+	font-size: 11px;
+}
+
+#logonView {
+	display: block;
+}
+
+#chatView {
+	display: none;
+}
+
+.window {
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+
+	.title-bar {
+		user-select: none;
+	}
+}
+
+.window-body {
+	flex: 1;
+}
+
+#motdContainer {
+	font-family: 'Arial', sans-serif;
+}
+
+#bottomLinks {
+	font-family: 'Pixelated MS Sans Serif', Arial, sans-serif;
+	background-color: silver;
+	box-shadow:
+		inset -1px -1px #0a0a0a,
+		inset 1px 1px #dfdfdf,
+		inset -2px -2px grey,
+		inset 2px 2px #fff;
+	padding: 0.95em;
+	margin: 0px;
+	right: 0;
+	bottom: 0;
+	text-align: center;
+	list-style: none;
+	display: block;
+	position: fixed;
+	left: 50%;
+	transform: translateX(-50%);
+
+	li {
+		padding: 0.2em;
+		display: inline-block;
+		border-right: 1px solid black;
+		margin: 0;
+		padding-right: 0.2rem;
+		margin-right: 0.2rem;
+		a {
+			font-size: 14pt;
+			color: #fff;
+		}
+		a:visited {
+			font-size: 14pt;
+			color: #fff;
+		}
+	}
+
+	li:last-child {
+		border-right: none;
+		padding-right: 0;
+		margin-right: 0;
+	}
+}
+
+#logonWindowLogo {
+	background-color: #ffffff;
+	margin: 0;
+	border-bottom: 8px solid;
+	border-image: linear-gradient(to right, #013755, #9ec0da, #013755) 4;
+	padding-top: 1.3rem;
+	padding-bottom: 1.3rem;
+	img {
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+	}
+}
+
+#logonForm {
+	margin-top: 25px;
+	margin-left: 15px;
+	display: flex;
+	flex-direction: column;
+	div {
+		display: flex;
+		flex-direction: row;
+	}
+}
+
+#logonUsername,
+#logonRoom {
+	align-self: flex-end;
+	margin-left: auto;
+	width: 300px;
+	margin-right: 90px;
+	margin-bottom: 10px;
+}
+
+#logonButton {
+	align-self: flex-end;
+	margin-left: auto;
+	margin-right: 90px;
+}
+
+#roomSettingsBody {
+	display: flex;
+	flex-direction: column;
+}
+
+#roomSettingsTabContent {
+	flex: 1;
+	margin-bottom: 8px;
+}
+
+#roomSettingsWallpaperTab {
+	display: flex;
+	flex-direction: column;
+
+	.wallpaperMonitor {
+		text-align: center;
+		flex: 1;
+	}
+
+	#roomSettingsWallpaperSelect {
+		height: 114px;
+		display: flex;
+		flex-direction: row;
+
+		gap: 8px;
+
+		.mainCol {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+
+			.tree-view {
+				flex: 1;
+				overflow: auto;
+			}
+		}
+
+		#roomSettingsWallpaperURL {
+			margin-top: 8px;
+			width: 100%;
+		}
+	}
+}
+
+#chatBar {
+	margin: 0;
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	width: 100%;
+	background-color: silver;
+	box-shadow:
+		inset -1px -1px #0a0a0a,
+		inset 1px 1px #dfdfdf,
+		inset -2px -2px grey,
+		inset 2px 2px #fff;
+	height: 3vh;
+	padding: 4px;
+	padding-left: 0px;
+}
+
+#chatInput {
+	flex-grow: 1;
+	margin-right: 4px;
+	margin-left: 4px;
+	height: 100%;
+}
+
+#chatSendBtn {
+	font-weight: bold;
+	margin-right: 4px;
+}
+
+.wallpaperMonitor {
+	div {
+		display: inline-block;
+		position: relative;
+	}
+
+	.wallpaperMonitorFg {
+		position: absolute;
+		width: 152px;
+		height: 112px;
+		margin: 17px 16px;
+		background: linear-gradient(160deg, #9b4f96, #0038a8);
+	}
+}
+
+.fieldRowRight {
+	justify-content: flex-end;
+}
+
+.context-menu {
+	background-color: silver;
+	box-shadow:
+		inset -1px -1px #0a0a0a,
+		inset 1px 1px #dfdfdf,
+		inset -2px -2px grey,
+		inset 2px 2px #fff;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+	z-index: 1;
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+}
+
+.context-menu-item {
+	padding-left: 0.2rem;
+	font-size: 11px;
+
+	padding-bottom: 0.2rem;
+	padding-top: 0.2rem;
+
+	font-family: 'Pixelated MS Sans Serif', Arial;
+
+	cursor: pointer;
+
+	padding: 5px;
+	padding-right: 5em;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	list-style-type: none;
+
+	&:hover {
+		background-color: navy;
+		color: #fff;
+	}
+}
+
+.d-none {
+	display: none;
+}
