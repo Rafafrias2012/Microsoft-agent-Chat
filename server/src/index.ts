@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import FastifyWS from '@fastify/websocket';
 import FastifyStatic from '@fastify/static';
+import FastifyCors from '@fastify/cors';
 import { Client } from './client.js';
 import { MSAgentChatRoom } from './room.js';
 import * as toml from 'toml';
@@ -12,6 +13,7 @@ import { isIP } from 'net';
 import { Database } from './database.js';
 import { MSAgentErrorMessage, MSAgentProtocolMessageType } from '@msagent-chat/protocol';
 import { DiscordLogger } from './discord.js';
+import { ImageUploader } from './imageuploader.js';
 
 let config: IConfig;
 let configPath: string;
@@ -35,7 +37,13 @@ let db = new Database(config.mysql);
 await db.init();
 
 const app = Fastify({
-	logger: true
+	logger: true,
+	bodyLimit: 20971520
+});
+
+app.register(FastifyCors, {
+	origin: config.http.origins,
+	methods: ['GET', 'POST', 'PUT'],
 });
 
 app.register(FastifyWS);
@@ -92,7 +100,10 @@ if (config.discord.enabled) {
 	discord = new DiscordLogger(config.discord);
 }
 
-let room = new MSAgentChatRoom(config.chat, config.agents, db, tts, discord);
+// Image upload
+let img = new ImageUploader(app, config.images);
+
+let room = new MSAgentChatRoom(config.chat, config.agents, db, img, tts, discord);
 
 app.register(async (app) => {
 	app.get('/api/socket', { websocket: true }, async (socket, req) => {

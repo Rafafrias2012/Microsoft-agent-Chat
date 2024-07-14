@@ -3,12 +3,14 @@ export interface IConfig {
 		host: string;
 		port: number;
 		proxied: boolean;
+		origins: string | string[] | boolean;
 	};
 	mysql: MySQLConfig;
 	chat: ChatConfig;
 	motd: motdConfig;
 	discord: DiscordConfig;
 	tts: TTSConfig;
+	images: ImagesConfig;
 	agents: AgentConfig[];
 }
 
@@ -57,4 +59,9 @@ export interface MySQLConfig {
 export interface DiscordConfig {
 	enabled: boolean;
 	webhookURL: string;
+}
+
+export interface ImagesConfig {
+	maxSize: { width: number, height: number };
+	expirySeconds: number;
 }

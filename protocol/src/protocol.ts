@@ -5,6 +5,7 @@ export enum MSAgentProtocolMessageType {
 	KeepAlive = 'nop',
 	Join = 'join',
 	Talk = 'talk',
+	SendImage = 'img',
 	Admin = 'admin',
 	// Server-to-client
 	Init = 'init',
@@ -33,6 +34,13 @@ export interface MSAgentTalkMessage extends MSAgentProtocolMessage {
 	op: MSAgentProtocolMessageType.Talk;
 	data: {
 		msg: string;
+	};
+}
+
+export interface MSAgentSendImageMessage extends MSAgentProtocolMessage {
+	op: MSAgentProtocolMessageType.SendImage;
+	data: {
+		id: string;
 	};
 }
 
@@ -73,6 +81,14 @@ export interface MSAgentChatMessage extends MSAgentProtocolMessage {
 		username: string;
 		message: string;
 		audio?: string | undefined;
+	};
+}
+
+export interface MSAgentImageMessage extends MSAgentProtocolMessage {
+	op: MSAgentProtocolMessageType.SendImage;
+	data: {
+		username: string;
+		id: string;
 	};
 }
 

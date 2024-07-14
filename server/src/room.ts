@@ -1,6 +1,7 @@
 import {
 	MSAgentAddUserMessage,
 	MSAgentChatMessage,
+	MSAgentImageMessage,
 	MSAgentInitMessage,
 	MSAgentPromoteMessage,
 	MSAgentProtocolMessage,
@@ -13,6 +14,7 @@ import { AgentConfig, ChatConfig } from './config.js';
 import * as htmlentities from 'html-entities';
 import { Database } from './database.js';
 import { DiscordLogger } from './discord.js';
+import { ImageUploader } from './imageuploader.js';
 
 export class MSAgentChatRoom {
 	agents: AgentConfig[];
@@ -21,14 +23,16 @@ export class MSAgentChatRoom {
 	msgId: number = 0;
 	config: ChatConfig;
 	db: Database;
+	img: ImageUploader;
 	discord: DiscordLogger | null;
 
-	constructor(config: ChatConfig, agents: AgentConfig[], db: Database, tts: TTSClient | null, discord: DiscordLogger | null) {
+	constructor(config: ChatConfig, agents: AgentConfig[], db: Database, img: ImageUploader, tts: TTSClient | null, discord: DiscordLogger | null) {
 		this.agents = agents;
 		this.clients = [];
 		this.config = config;
 		this.tts = tts;
 		this.db = db;
+		this.img = img;
 		this.discord = discord;
 	}
 
@@ -96,6 +100,21 @@ export class MSAgentChatRoom {
 			}
 			this.discord?.logMsg(client.username!, message);
 		});
+		client.on('image', async (id) => {
+			if (!this.img.has(id)) return;
+
+			let msg: MSAgentImageMessage = {
+				op: MSAgentProtocolMessageType.SendImage,
+				data: {
+					username: client.username!,
+					id: id
+				}
+			};
+
+			for (const _client of this.getActiveClients()) {
+				_client.send(msg);
+			}
+		})
 		client.on('admin', () => {
 			let msg: MSAgentPromoteMessage = {
 				op: MSAgentProtocolMessageType.Promote,

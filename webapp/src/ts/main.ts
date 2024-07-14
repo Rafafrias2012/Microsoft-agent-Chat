@@ -17,6 +17,7 @@ const elements = {
 
 	chatView: document.getElementById('chatView') as HTMLDivElement,
 	chatInput: document.getElementById('chatInput') as HTMLInputElement,
+	imageUploadBtn: document.getElementById('imageUploadBtn') as HTMLButtonElement,
 	chatSendBtn: document.getElementById('chatSendBtn') as HTMLButtonElement,
 
 	roomSettingsWindow: document.getElementById('roomSettingsWindow') as HTMLDivElement
@@ -120,6 +121,24 @@ function talk() {
 
 roomInit();
 
+let imgUploadInput = document.createElement('input');
+imgUploadInput.type = 'file';
+imgUploadInput.accept = 'image/jpeg,image/png,image/gif,image/webp';
+
+elements.imageUploadBtn.addEventListener('click', () => {
+	imgUploadInput.click();
+});
+
+imgUploadInput.addEventListener('change', async () => {
+	if (!imgUploadInput.files || imgUploadInput.files.length === 0) return;
+	let file = imgUploadInput.files[0];
+	let reader = new FileReader();
+	reader.onload = async () => {
+		let buffer = reader.result as ArrayBuffer;
+		await Room?.sendImage(buffer, file.type);
+	};
+	reader.readAsArrayBuffer(file);
+});
 
 let w = window as any;
 

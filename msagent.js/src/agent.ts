@@ -4,7 +4,7 @@ import { ContextMenu, ContextMenuItem } from './contextmenu.js';
 import { AcsAnimation, AcsAnimationFrameInfo } from './structs/animation.js';
 import { AcsImageEntry } from './structs/image.js';
 import { Point, Size } from './types.js';
-import { wordballoonDrawText } from './wordballoon.js';
+import { wordballoonDrawImage, wordballoonDrawText } from './wordballoon.js';
 
 // probably should be in a utility module
 function dwAlign(off: number): number {
@@ -61,44 +61,19 @@ enum AgentWordBalloonPosition {
 	BelowCentered
 }
 
-class AgentWordBalloonState {
-	char: Agent;
-	text: string;
-	hasTip: boolean;
-	position: AgentWordBalloonPosition;
+abstract class AgentWordBalloonState {
+	abstract char: Agent;
+	abstract hasTip: boolean;
+	abstract position: AgentWordBalloonPosition;
 
 	balloonCanvas: HTMLCanvasElement;
 	balloonCanvasCtx: CanvasRenderingContext2D;
 
-	constructor(char: Agent, text: string, hasTip: boolean, position: AgentWordBalloonPosition, textColor: string) {
-		this.char = char;
-		this.text = text;
-		this.hasTip = hasTip;
-		this.position = position;
+	constructor() {
 		this.balloonCanvas = document.createElement('canvas');
 		this.balloonCanvasCtx = this.balloonCanvas.getContext('2d')!;
-
 		this.balloonCanvas.style.position = 'absolute';
-
-		this.balloonCanvasCtx.font = '14px arial';
-
-		this.balloonCanvas.width = 300;
-		this.balloonCanvas.height = 300;
-
-		// hack fix for above
 		this.balloonCanvas.style.pointerEvents = 'none';
-
-		let rect = wordballoonDrawText(this.balloonCanvasCtx, { x: 0, y: 0 }, this.text, 20, hasTip, textColor);
-
-		// Second pass, actually set the element to the right width and stuffs
-		this.balloonCanvas.width = rect.w;
-		this.balloonCanvas.height = rect.h;
-
-		wordballoonDrawText(this.balloonCanvasCtx, { x: 0, y: 0 }, this.text, 20, hasTip, textColor);
-
-		this.char.getElement().appendChild(this.balloonCanvas);
-
-		this.show();
 	}
 
 	show() {
@@ -129,6 +104,66 @@ class AgentWordBalloonState {
 	}
 }
 
+class AgentTextWordBalloonState extends AgentWordBalloonState {
+	char: Agent;
+	text: string;
+	hasTip: boolean;
+	position: AgentWordBalloonPosition;
+
+	constructor(char: Agent, text: string, hasTip: boolean, position: AgentWordBalloonPosition, textColor: string) {
+		super();
+		this.char = char;
+		this.text = text;
+		this.hasTip = hasTip;
+		this.position = position;
+		this.balloonCanvasCtx.font = '14px arial';
+
+		this.balloonCanvas.width = 300;
+		this.balloonCanvas.height = 300;
+
+		let rect = wordballoonDrawText(this.balloonCanvasCtx, { x: 0, y: 0 }, this.text, 20, hasTip, textColor);
+
+		// Second pass, actually set the element to the right width and stuffs
+		this.balloonCanvas.width = rect.w;
+		this.balloonCanvas.height = rect.h;
+
+		wordballoonDrawText(this.balloonCanvasCtx, { x: 0, y: 0 }, this.text, 20, hasTip, textColor);
+
+		this.char.getElement().appendChild(this.balloonCanvas);
+
+		this.show();
+	}
+}
+
+class AgentImageWordBalloonState extends AgentWordBalloonState {
+	char: Agent;
+	img: HTMLImageElement;
+	hasTip: boolean;
+	position: AgentWordBalloonPosition;
+
+	constructor(char: Agent, img: HTMLImageElement, hasTip: boolean, position: AgentWordBalloonPosition) {
+		super();
+		this.char = char;
+		this.img = img;
+		this.hasTip = hasTip;
+		this.position = position;
+
+		this.balloonCanvas.width = 300;
+		this.balloonCanvas.height = 300;
+
+		let rect = wordballoonDrawImage(this.balloonCanvasCtx, { x: 0, y: 0 }, this.img, hasTip);
+
+		// Second pass, actually set the element to the right width and stuffs
+		this.balloonCanvas.width = rect.w;
+		this.balloonCanvas.height = rect.h;
+
+		wordballoonDrawImage(this.balloonCanvasCtx, { x: 0, y: 0 }, this.img, hasTip);
+
+		this.char.getElement().appendChild(this.balloonCanvas);
+		this.show();
+	}
+}
+
 export class Agent {
 	private data: AcsData;
 	private charDiv: HTMLDivElement;
@@ -141,7 +176,7 @@ export class Agent {
 
 	private animState: AgentAnimationState | null = null;
 	private wordballoonState: AgentWordBalloonState | null = null;
-	private usernameBalloonState: AgentWordBalloonState | null = null;
+	private usernameBalloonState: AgentTextWordBalloonState | null = null;
 
 	private contextMenu: ContextMenu;
 
@@ -299,7 +334,7 @@ export class Agent {
 			this.usernameBalloonState = null;
 		}
 
-		this.usernameBalloonState = new AgentWordBalloonState(this, username, false, AgentWordBalloonPosition.BelowCentered, color);
+		this.usernameBalloonState = new AgentTextWordBalloonState(this, username, false, AgentWordBalloonPosition.BelowCentered, color);
 		this.usernameBalloonState.show();
 	}
 
@@ -308,7 +343,17 @@ export class Agent {
 			this.stopSpeaking();
 		}
 
-		this.wordballoonState = new AgentWordBalloonState(this, text, true, AgentWordBalloonPosition.AboveCentered, '#000000');
+		this.wordballoonState = new AgentTextWordBalloonState(this, text, true, AgentWordBalloonPosition.AboveCentered, '#000000');
+		this.wordballoonState.positionUpdated();
+		this.wordballoonState.show();
+	}
+
+	speakImage(img: HTMLImageElement) {
+		if (this.wordballoonState != null) {
+			this.stopSpeaking();
+		}
+
+		this.wordballoonState = new AgentImageWordBalloonState(this, img, true, AgentWordBalloonPosition.AboveCentered);
 		this.wordballoonState.positionUpdated();
 		this.wordballoonState.show();
 	}

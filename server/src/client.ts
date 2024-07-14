@@ -10,6 +10,7 @@ import {
 	MSAgentAdminMessage,
 	MSAgentAdminOperation,
 	MSAgentErrorMessage,
+	MSAgentSendImageMessage,
 	MSAgentJoinMessage,
 	MSAgentProtocolMessage,
 	MSAgentProtocolMessageType,
@@ -26,6 +27,7 @@ export interface Client {
 	on(event: 'join', listener: () => void): this;
 	on(event: 'close', listener: () => void): this;
 	on(event: 'talk', listener: (msg: string) => void): this;
+	on(event: 'image', listener: (id: string) => void): this;
 
 	on(event: string, listener: Function): this;
 }
@@ -158,6 +160,12 @@ export class Client extends EventEmitter {
 					return;
 				}
 				this.emit('talk', talkMsg.data.msg);
+				break;
+			}
+			case MSAgentProtocolMessageType.SendImage: {
+				let imgMsg = msg as MSAgentSendImageMessage;
+				if (!imgMsg.data || !imgMsg.data.id || !this.chatRateLimit.request()) return;
+				this.emit('image', imgMsg.data.id);
 				break;
 			}
 			case MSAgentProtocolMessageType.Admin: {

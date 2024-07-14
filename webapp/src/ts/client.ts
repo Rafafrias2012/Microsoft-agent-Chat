@@ -11,12 +11,14 @@ import {
 	MSAgentAdminOperation,
 	MSAgentChatMessage,
 	MSAgentErrorMessage,
+	MSAgentImageMessage,
 	MSAgentInitMessage,
 	MSAgentJoinMessage,
 	MSAgentPromoteMessage,
 	MSAgentProtocolMessage,
 	MSAgentProtocolMessageType,
 	MSAgentRemoveUserMessage,
+	MSAgentSendImageMessage,
 	MSAgentTalkMessage
 } from '@msagent-chat/protocol';
 import { User } from './user';
@@ -49,6 +51,7 @@ export class MSAgentClient {
 	private charlimit: number = 0;
 	private admin: boolean;
 	private loginCb: (e: KeyboardEvent) => void;
+	private currentMsgId: number = 0;
 
 	private username: string | null = null;
 	private agentContainer: HTMLElement;
@@ -170,6 +173,31 @@ export class MSAgentClient {
 			}
 		};
 		this.send(talkMsg);
+	}
+
+	async sendImage(img: ArrayBuffer, type: string) {
+		// Upload image
+		let res = await fetch(this.url + '/api/upload', {
+			method: 'PUT',
+			body: img,
+			headers: {
+				'Content-Type': type
+			}
+		});
+		let json = await res.json();
+		if (!json.success) {
+			throw new Error('Failed to upload image: ' + json.error);
+		}
+		let id = json.id as string;
+
+		// Send image
+		let msg: MSAgentSendImageMessage = {
+			op: MSAgentProtocolMessageType.SendImage,
+			data: {
+				id
+			}
+		};
+		this.send(msg);
 	}
 
 	getCharlimit() {
@@ -317,10 +345,12 @@ export class MSAgentClient {
 
 					this.playingAudio.set(user!.username, audio);
 
+					let msgId = ++this.currentMsgId;
+
 					audio.addEventListener('ended', () => {
 						// give a bit of time before the wordballoon disappears
 						setTimeout(() => {
-							if (this.playingAudio.get(user!.username) === audio) {
+							if (this.currentMsgId === msgId) {
 								user!.agent.stopSpeaking();
 								this.playingAudio.delete(user!.username);
 							}
@@ -330,6 +360,24 @@ export class MSAgentClient {
 					user?.agent.speak(chatMsg.data.message);
 					audio.play();
 				}
+				break;
+			}
+			case MSAgentProtocolMessageType.SendImage: {
+				let imgMsg = msg as MSAgentImageMessage;
+				let user = this.users.find((u) => u.username === imgMsg.data.username);
+				if (!user || user.muted) return;
+				let img = new Image();
+				let msgId = ++this.currentMsgId;
+				img.addEventListener('load', () => {
+					this.playingAudio.get(user.username)?.pause();
+					user.agent.speakImage(img);
+					setTimeout(() => {
+						if (this.currentMsgId === msgId) {
+							user.agent.stopSpeaking();
+						}
+					}, 5000);
+				});
+				img.src = `${this.url}/api/image/${imgMsg.data.id}`;
 				break;
 			}
 			case MSAgentProtocolMessageType.Admin: {
