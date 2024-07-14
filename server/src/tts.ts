@@ -4,6 +4,7 @@ import { TTSConfig } from './config.js';
 import { Readable } from 'node:stream';
 import { ReadableStream } from 'node:stream/web';
 import { finished } from 'node:stream/promises';
+import ffmpeg from 'fluent-ffmpeg';
 
 export class TTSClient {
 	private config: TTSConfig;
@@ -42,7 +43,7 @@ export class TTSClient {
 
 	async synthesizeToFile(text: string, id: string): Promise<string> {
 		this.ensureDirectoryExists();
-		let wavFilename = id + '.wav';
+		let wavFilename = id + (this.config.transcodeOpus ? '.ogg' : '.wav');
 		let wavPath = path.join(this.config.tempDir, wavFilename);
 		try {
 			await fs.unlink(wavPath);
@@ -59,7 +60,14 @@ export class TTSClient {
 				voice: this.config.voice
 			})
 		});
-		await finished(Readable.fromWeb(res.body as ReadableStream<any>).pipe(stream));
+		if (this.config.transcodeOpus) {
+			let coder = ffmpeg(Readable.fromWeb(res.body as ReadableStream<any>))
+				.audioCodec('opus')
+				.outputFormat('ogg');
+			await finished(coder.pipe(stream));
+		} else {
+			await finished(Readable.fromWeb(res.body as ReadableStream<any>).pipe(stream));
+		}
 		await file.close();
 		this.deleteOps.set(
 			wavPath,

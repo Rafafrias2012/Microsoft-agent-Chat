@@ -78,6 +78,8 @@ export class MSAgentChatRoom {
 			}
 		});
 		client.on('talk', async (message) => {
+			message = message.trim();
+			if (message.length === 0) return;
 			let msg: MSAgentChatMessage = {
 				op: MSAgentProtocolMessageType.Chat,
 				data: {

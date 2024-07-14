@@ -42,6 +42,8 @@ enabled = true
 server = "http://127.0.0.1:3001"
 voice = "Microsoft Sam"
 tempDir = "/tmp/msac-tts"
+# Transcode SAPI5 Waveform files to Opus. Greatly reduces bandwidth usage. Requires ffmpeg to be installed and in PATH.
+transcodeOpus = true
 wavExpirySeconds = 60
 
 [[agents]]

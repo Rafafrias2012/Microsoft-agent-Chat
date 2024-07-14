@@ -17,6 +17,7 @@ export interface TTSConfig {
 	server: string;
 	voice: string;
 	tempDir: string;
+	transcodeOpus: boolean;
 	wavExpirySeconds: number;
 }
 
