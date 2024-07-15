@@ -232,7 +232,7 @@ export class Agent {
 				{ once: true }
 			);
 		});
-		
+
 		document.addEventListener('touchmove', (e) => {
 			if (!this.dragging) return;
 
@@ -258,7 +258,7 @@ export class Agent {
 			this.y += e.movementY;
 			this.setLoc();
 		});
-		
+
 		window.addEventListener('resize', () => {
 			this.setLoc();
 		});

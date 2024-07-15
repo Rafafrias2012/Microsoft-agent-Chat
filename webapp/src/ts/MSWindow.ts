@@ -96,7 +96,7 @@ export class MSWindow {
 				{ once: true }
 			);
 		});
-		
+
 		document.addEventListener('touchmove', (e) => {
 			if (!this.dragging) return;
 
