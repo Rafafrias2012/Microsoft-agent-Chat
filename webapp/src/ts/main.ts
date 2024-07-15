@@ -129,19 +129,30 @@ elements.imageUploadBtn.addEventListener('click', () => {
 	imgUploadInput.click();
 });
 
+document.addEventListener('paste', (e) => {
+	if (e.clipboardData?.files.length === 0) return;
+	let file = e.clipboardData!.files[0];
+	if (!file.type.startsWith('image/')) return;
+	if (!window.confirm(`Upload ${file.name} (${Math.round(file.size / 1000)}KB)?`)) return;
+	uploadFile(file);
+});
+
 imgUploadInput.addEventListener('change', async () => {
 	if (!imgUploadInput.files || imgUploadInput.files.length === 0) return;
-	let file = imgUploadInput.files[0];
+	uploadFile(imgUploadInput.files[0]);
+});
+
+function uploadFile(file: File) {
 	let reader = new FileReader();
 	reader.onload = async () => {
 		let buffer = reader.result as ArrayBuffer;
 		await Room?.sendImage(buffer, file.type);
 	};
 	reader.readAsArrayBuffer(file);
-});
+}
 
 let w = window as any;
 
 w.agentchat = {
-	getRoom: () => Room,
-}
+	getRoom: () => Room
+};
