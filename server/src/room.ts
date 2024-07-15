@@ -92,8 +92,12 @@ export class MSAgentChatRoom {
 				}
 			};
 			if (this.tts !== null) {
-				let filename = await this.tts.synthesizeToFile(message, (++this.msgId).toString(10));
-				msg.data.audio = '/api/tts/' + filename;
+				try {
+					let filename = await this.tts.synthesizeToFile(message, (++this.msgId).toString(10));
+					msg.data.audio = '/api/tts/' + filename;
+				} catch (e) {
+					console.error(`Error synthesizing TTS: ${(e as Error).message}`);
+				}
 			}
 			for (const _client of this.getActiveClients()) {
 				_client.send(msg);
