@@ -335,6 +335,10 @@ export class MSAgentClient {
 				if (user?.muted) return;
 
 				this.events.emit('chat', user, chatMsg.data.message);
+
+				user?.agent.speak(chatMsg.data.message);
+				let msgId = ++user!.msgId;
+
 				if (chatMsg.data.audio !== undefined) {
 					let audio = new Audio(this.url + chatMsg.data.audio);
 					if (this.playingAudio.has(user!.username)) {
@@ -343,8 +347,6 @@ export class MSAgentClient {
 					}
 
 					this.playingAudio.set(user!.username, audio);
-
-					let msgId = ++user!.msgId;
 
 					audio.addEventListener('ended', () => {
 						// give a bit of time before the wordballoon disappears
@@ -356,8 +358,13 @@ export class MSAgentClient {
 						}, 1000);
 					});
 
-					user?.agent.speak(chatMsg.data.message);
 					audio.play();
+				} else {
+					setTimeout(() => {
+						if (user!.msgId === msgId) {
+							user!.agent.stopSpeaking();
+						}
+					}, 5000);
 				}
 				break;
 			}
