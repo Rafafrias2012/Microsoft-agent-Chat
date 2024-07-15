@@ -62,6 +62,6 @@ export interface DiscordConfig {
 }
 
 export interface ImagesConfig {
-	maxSize: { width: number, height: number };
+	maxSize: { width: number; height: number };
 	expirySeconds: number;
 }

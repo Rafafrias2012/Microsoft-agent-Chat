@@ -181,8 +181,8 @@ export function wordballoonDrawText(ctx: CanvasRenderingContext2D, at: Point, te
 export function wordballoonDrawImage(ctx: CanvasRenderingContext2D, at: Point, img: HTMLImageElement, hasTip: boolean = true): Rect {
 	// Round the image size up to the nearest 12x12, plus 12px padding.
 	let size = {
-		w: (Math.ceil(img.width / 12) * 12) + 6,
-		h: (Math.ceil(img.height / 12) * 12) + 6
+		w: Math.ceil(img.width / 12) * 12 + 6,
+		h: Math.ceil(img.height / 12) * 12 + 6
 	};
 
 	// Draw the word balloon and get the inner rect
@@ -195,6 +195,6 @@ export function wordballoonDrawImage(ctx: CanvasRenderingContext2D, at: Point, i
 		x: at.x,
 		y: at.y,
 		w: rectInner.w + 12 * 3 + 12,
-		h: rectInner.h + 13 * 3 + 18,
+		h: rectInner.h + 13 * 3 + 18
 	};
 }

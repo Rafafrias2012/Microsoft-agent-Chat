@@ -114,7 +114,7 @@ export class MSAgentChatRoom {
 			for (const _client of this.getActiveClients()) {
 				_client.send(msg);
 			}
-		})
+		});
 		client.on('admin', () => {
 			let msg: MSAgentPromoteMessage = {
 				op: MSAgentProtocolMessageType.Promote,

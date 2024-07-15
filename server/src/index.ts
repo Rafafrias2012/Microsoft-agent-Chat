@@ -43,7 +43,7 @@ const app = Fastify({
 
 app.register(FastifyCors, {
 	origin: config.http.origins,
-	methods: ['GET', 'POST', 'PUT'],
+	methods: ['GET', 'POST', 'PUT']
 });
 
 app.register(FastifyWS);
