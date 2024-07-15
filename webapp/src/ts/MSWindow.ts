@@ -21,6 +21,8 @@ export class MSWindow {
 	dragging: boolean;
 	x: number;
 	y: number;
+	lastTouchX: number;
+	lastTouchY: number;
 	constructor(wnd: HTMLDivElement, config: MSWindowConfig) {
 		this.wnd = wnd;
 		this.shown = false;
@@ -66,6 +68,48 @@ export class MSWindow {
 			}
 		}
 		this.setLoc();
+
+		this.lastTouchX = 0;
+		this.lastTouchY = 0;
+
+		this.titlebar.addEventListener('mousedown', () => {
+			this.dragging = true;
+			document.addEventListener(
+				'mouseup',
+				() => {
+					this.dragging = false;
+				},
+				{ once: true }
+			);
+		});
+
+		this.titlebar.addEventListener('touchstart', (e) => {
+			const touch = e.touches[0];
+			this.lastTouchX = touch.clientX;
+			this.lastTouchY = touch.clientY;
+			this.dragging = true;
+			document.addEventListener(
+				'touchend',
+				() => {
+					this.dragging = false;
+				},
+				{ once: true }
+			);
+		});
+		
+		document.addEventListener('touchmove', (e) => {
+			if (!this.dragging) return;
+
+			const touch = e.touches[0];
+
+			const movementX = touch.clientX - this.lastTouchX;
+			const movementY = touch.clientY - this.lastTouchY;
+			this.lastTouchX = touch.clientX;
+			this.lastTouchY = touch.clientY;
+			this.x += movementX;
+			this.y += movementY;
+			this.setLoc();
+		});
 
 		this.titlebar.addEventListener('mousedown', () => {
 			this.dragging = true;

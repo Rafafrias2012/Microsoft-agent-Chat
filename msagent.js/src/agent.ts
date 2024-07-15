@@ -174,6 +174,9 @@ export class Agent {
 	private x: number;
 	private y: number;
 
+	private lastTouchX: number;
+	private lastTouchY: number;
+
 	private animState: AgentAnimationState | null = null;
 	private wordballoonState: AgentWordBalloonState | null = null;
 	private usernameBalloonState: AgentTextWordBalloonState | null = null;
@@ -200,6 +203,10 @@ export class Agent {
 		this.dragging = false;
 		this.x = 0;
 		this.y = 0;
+
+		this.lastTouchX = 0;
+		this.lastTouchY = 0;
+
 		this.setLoc();
 		this.cnv.addEventListener('mousedown', () => {
 			this.dragging = true;
@@ -211,16 +218,47 @@ export class Agent {
 				{ once: true }
 			);
 		});
+
+		this.cnv.addEventListener('touchstart', (e) => {
+			const touch = e.touches[0];
+			this.lastTouchX = touch.clientX;
+			this.lastTouchY = touch.clientY;
+			this.dragging = true;
+			document.addEventListener(
+				'touchend',
+				() => {
+					this.dragging = false;
+				},
+				{ once: true }
+			);
+		});
+		
+		document.addEventListener('touchmove', (e) => {
+			if (!this.dragging) return;
+
+			const touch = e.touches[0];
+
+			const movementX = touch.clientX - this.lastTouchX;
+			const movementY = touch.clientY - this.lastTouchY;
+			this.lastTouchX = touch.clientX;
+			this.lastTouchY = touch.clientY;
+			this.x += movementX;
+			this.y += movementY;
+			this.setLoc();
+		});
+
 		this.cnv.addEventListener('contextmenu', (e) => {
 			e.preventDefault();
 			this.contextMenu.show(e.clientX, e.clientY);
 		});
+
 		document.addEventListener('mousemove', (e) => {
 			if (!this.dragging) return;
 			this.x += e.movementX;
 			this.y += e.movementY;
 			this.setLoc();
 		});
+		
 		window.addEventListener('resize', () => {
 			this.setLoc();
 		});

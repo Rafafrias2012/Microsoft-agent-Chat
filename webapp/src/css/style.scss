@@ -1,6 +1,7 @@
 body {
 	background-color: #3a6ea5;
 	font-size: 11px;
+	overscroll-behavior: contain;
 }
 
 #logonView {
@@ -240,6 +241,8 @@ body {
 	margin-bottom: 2px;
 	list-style-type: none;
 
+	user-select: none;
+
 	&:hover {
 		background-color: navy;
 		color: #fff;
@@ -248,4 +251,8 @@ body {
 
 .d-none {
 	display: none;
+}
+
+button {
+	user-select: none;
 }
