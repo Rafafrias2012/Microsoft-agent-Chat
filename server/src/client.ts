@@ -156,7 +156,7 @@ export class Client extends EventEmitter {
 					return;
 				}
 				if (talkMsg.data.msg.length > this.room.config.charlimit) return;
-				if (this.room.config.bannedWords.some((w) => talkMsg.data.msg.indexOf(w) !== -1)) {
+				if (this.room.config.bannedWords.some((w) => talkMsg.data.msg.toLowerCase().indexOf(w.toLowerCase()) !== -1)) {
 					return;
 				}
 				this.emit('talk', talkMsg.data.msg);
