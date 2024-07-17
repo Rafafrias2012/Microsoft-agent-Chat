@@ -114,7 +114,7 @@ export class Client extends EventEmitter {
 		switch (msg.op) {
 			case MSAgentProtocolMessageType.Join: {
 				let joinMsg = msg as MSAgentJoinMessage;
-				if (!joinMsg.data || !joinMsg.data.username || !joinMsg.data.username) {
+				if (this.username !== null || !joinMsg.data || !joinMsg.data.username || !joinMsg.data.username) {
 					this.socket.close();
 					return;
 				}
