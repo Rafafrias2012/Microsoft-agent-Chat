@@ -12,13 +12,7 @@ Includes:
 ## Jumpstart
 
 1. Install dependencies: `yarn`
-2. Build everything
-```
-yarn workspace @msagent-chat/msagent.js build
-yarn workspace @msagent-chat/protocol build
-yarn workspace @msagent-chat/webapp build
-yarn workspace @msagent-chat/server build
-```
+2. Build everything: `yarn build`
 3. Copy `server/config.example.toml` to `server/config.toml` and fill out the relevant fields.
 4. Run the server: `yarn workspace @msagent-chat/server serve`
 5.  - Run the webapp on the development webserver: `yarn workspace @msagent-chat/webapp serve`; OR
