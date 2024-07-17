@@ -65,6 +65,8 @@ logonWindow.show();
 let loggingIn = false;
 elements.logonForm.addEventListener('submit', (e) => {
 	e.preventDefault();
+	localStorage.setItem("MSAUser", elements.logonUsername.value);
+	localStorage.setItem("MSAgent", elements.agentSelect.value);
 	connectToRoom();
 });
 
@@ -95,11 +97,17 @@ async function connectToRoom() {
 
 document.addEventListener('DOMContentLoaded', async () => {
 	await agentInit();
+	elements.logonUsername.value = localStorage.getItem("MSAUser") || "";
 	for (const agent of await Room.getAgents()) {
 		let option = document.createElement('option');
 		option.innerText = agent.friendlyName;
 		option.value = agent.filename;
 		elements.agentSelect.appendChild(option);
+	}
+	elements.agentSelect.value = localStorage.getItem("MSAgent") || "";
+	if(elements.agentSelect.value === "") {
+		// HTMLSelectElement is like this, don't complain.
+		elements.agentSelect.value = "";
 	}
 	let motd = await Room.getMotd();
 	elements.motdContainer.innerHTML = motd.html;
