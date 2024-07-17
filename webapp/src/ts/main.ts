@@ -65,8 +65,8 @@ logonWindow.show();
 let loggingIn = false;
 elements.logonForm.addEventListener('submit', (e) => {
 	e.preventDefault();
-	localStorage.setItem("MSAUser", elements.logonUsername.value);
-	localStorage.setItem("MSAgent", elements.agentSelect.value);
+	localStorage.setItem('MSAUser', elements.logonUsername.value);
+	localStorage.setItem('MSAgent', elements.agentSelect.value);
 	connectToRoom();
 });
 
@@ -97,17 +97,17 @@ async function connectToRoom() {
 
 document.addEventListener('DOMContentLoaded', async () => {
 	await agentInit();
-	elements.logonUsername.value = localStorage.getItem("MSAUser") || "";
-	for (const agent of await Room.getAgents()) {
+	elements.logonUsername.value = localStorage.getItem('MSAUser') || '';
+	let agents = await Room.getAgents();
+	for (const agent of agents) {
 		let option = document.createElement('option');
 		option.innerText = agent.friendlyName;
 		option.value = agent.filename;
 		elements.agentSelect.appendChild(option);
 	}
-	elements.agentSelect.value = localStorage.getItem("MSAgent") || "";
-	if(elements.agentSelect.value === "") {
-		// HTMLSelectElement is like this, don't complain.
-		elements.agentSelect.value = "";
+	let savedAgent = localStorage.getItem('MSAgent') || '';
+	if (agents.some((x) => x.filename === savedAgent)) {
+		elements.agentSelect.value = savedAgent;
 	}
 	let motd = await Room.getMotd();
 	elements.motdContainer.innerHTML = motd.html;
