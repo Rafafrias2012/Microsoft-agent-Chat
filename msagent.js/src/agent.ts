@@ -24,6 +24,7 @@ function randint(min: number, max: number) {
 class AgentAnimationState {
 	char: Agent;
 	anim: AcsAnimation;
+	private cancelled: boolean = false;
 
 	finishCallback: () => void;
 	frameIndex = 0;
@@ -41,18 +42,26 @@ class AgentAnimationState {
 		this.nextFrame();
 	}
 
+	cancel() {
+		this.cancelled = true;
+		clearTimeout(this.interval);
+	}
+
 	nextFrame() {
-		this.char.drawAnimationFrame(this.anim.frameInfo[this.frameIndex++]);
+		requestAnimationFrame(() => {
+			if (this.cancelled) return;
+			this.char.drawAnimationFrame(this.anim.frameInfo[this.frameIndex++]);
 
-		if (this.frameIndex >= this.anim.frameInfo.length) {
-			this.finishCallback();
-			return;
-		}
-
-		//@ts-ignore
-		this.interval = setTimeout(() => {
-			this.nextFrame();
-		}, this.anim.frameInfo[this.frameIndex].frameDuration * 10);
+			if (this.frameIndex >= this.anim.frameInfo.length) {
+				this.finishCallback();
+				return;
+			}
+	
+			//@ts-ignore
+			this.interval = setTimeout(() => {
+				this.nextFrame();
+			}, this.anim.frameInfo[this.frameIndex].frameDuration * 10);
+		});
 	}
 }
 
@@ -350,7 +359,10 @@ export class Agent {
 
 	// add promise versions later.
 	playAnimation(index: number, finishCallback: () => void) {
-		if (this.animState != null) throw new Error('Cannot play multiple animations at once.');
+		if (this.animState != null) {
+			this.animState.cancel();
+			this.animState = null;
+		}
 		let animInfo = this.data.animInfo[index];
 
 		// Create and start the animation state
