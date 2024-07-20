@@ -41,14 +41,11 @@ function roomInit() {
 }
 
 let motdWindow = new MSWindow(elements.motdWindow, {
-	minWidth: 600,
-	minHeight: 300,
 	maxWidth: 600,
 	startPosition: MSWindowStartPosition.Center
 });
 
 let logonWindow = new MSWindow(elements.logonWindow, {
-	minWidth: 500,
 	minHeight: 275,
 	startPosition: MSWindowStartPosition.Center
 });

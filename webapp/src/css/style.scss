@@ -35,6 +35,9 @@ html {
 }
 
 #bottomLinks {
+	@media screen and (max-height: 500px) {
+		display: none;
+	}
 	font-family: 'Pixelated MS Sans Serif', Arial, sans-serif;
 	background-color: silver;
 	box-shadow:
@@ -77,6 +80,13 @@ html {
 	}
 }
 
+#logonWindow {
+	min-width: 250px;
+	@media screen and (min-width: 500px) {
+		min-width: 500px;
+	};
+}
+
 #logonWindowLogo {
 	background-color: #ffffff;
 	margin: 0;
@@ -105,16 +115,14 @@ html {
 #logonUsername,
 #logonRoom {
 	align-self: flex-end;
+	width: 81%;
 	margin-left: auto;
-	width: 300px;
-	margin-right: 90px;
 	margin-bottom: 10px;
 }
 
 #logonButton {
 	align-self: flex-end;
 	margin-left: auto;
-	margin-right: 90px;
 }
 
 #roomSettingsBody {
@@ -175,7 +183,8 @@ html {
 		inset 1px 1px #dfdfdf,
 		inset -2px -2px grey,
 		inset 2px 2px #fff;
-	height: 3vh;
+	min-height: 20px;
+	max-height: 3vh;
 	padding: 4px;
 	padding-left: 0px;
 }
@@ -184,7 +193,6 @@ html {
 	flex-grow: 1;
 	margin-right: 4px;
 	margin-left: 4px;
-	height: 100%;
 }
 
 #chatSendBtn {

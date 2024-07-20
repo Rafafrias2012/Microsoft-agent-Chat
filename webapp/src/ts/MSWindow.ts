@@ -1,6 +1,6 @@
 export interface MSWindowConfig {
-	minWidth: number;
-	minHeight: number;
+	minWidth?: number | undefined;
+	minHeight?: number | undefined;
 	maxWidth?: number | undefined;
 	maxHeight?: number | undefined;
 	startPosition: MSWindowStartPosition; // TODO: Should be a union with the enum and a "Point" (containing X and Y)
@@ -27,8 +27,10 @@ export class MSWindow {
 		this.wnd = wnd;
 		this.shown = false;
 		this.config = config;
-		this.wnd.style.minWidth = config.minWidth + 'px';
-		this.wnd.style.minHeight = config.minHeight + 'px';
+		this.x = 0;
+		this.y = 0;
+		if (config.minWidth) this.wnd.style.minWidth = config.minWidth + 'px';
+		if (config.minHeight) this.wnd.style.minHeight = config.minHeight + 'px';
 
 		if (config.maxWidth) this.wnd.style.maxWidth = config.maxWidth + 'px';
 		if (config.maxHeight) this.wnd.style.maxHeight = config.maxHeight + 'px';
@@ -52,21 +54,6 @@ export class MSWindow {
 
 		// Register window move handlers
 		this.dragging = false;
-		switch (this.config.startPosition) {
-			case MSWindowStartPosition.TopLeft: {
-				this.x = 0;
-				this.y = 0;
-				break;
-			}
-			case MSWindowStartPosition.Center: {
-				this.x = document.documentElement.clientWidth / 2 - this.config.minWidth / 2;
-				this.y = document.documentElement.clientHeight / 2 - this.config.minHeight / 2;
-				break;
-			}
-			default: {
-				throw new Error('Invalid start position');
-			}
-		}
 		this.setLoc();
 
 		this.lastTouchX = 0;
@@ -137,6 +124,22 @@ export class MSWindow {
 	show() {
 		this.wnd.classList.remove('d-none');
 		this.shown = true;
+		switch (this.config.startPosition) {
+			case MSWindowStartPosition.TopLeft: {
+				this.x = 0;
+				this.y = 0;
+				break;
+			}
+			case MSWindowStartPosition.Center: {
+				this.x = document.documentElement.clientWidth / 2 - this.wnd.clientWidth / 2;
+				this.y = document.documentElement.clientHeight / 2 - this.wnd.clientHeight / 2;
+				break;
+			}
+			default: {
+				throw new Error('Invalid start position');
+			}
+		}
+		this.setLoc();
 	}
 
 	hide() {
@@ -147,8 +150,8 @@ export class MSWindow {
 	private setLoc() {
 		if (this.x < 0) this.x = 0;
 		if (this.y < 0) this.y = 0;
-		if (this.x > document.documentElement.clientWidth - this.config.minWidth) this.x = document.documentElement.clientWidth - this.config.minWidth;
-		if (this.y > document.documentElement.clientHeight - this.config.minHeight) this.y = document.documentElement.clientHeight - this.config.minHeight;
+		if (this.x > document.documentElement.clientWidth - this.wnd.clientWidth) this.x = document.documentElement.clientWidth - this.wnd.clientWidth;
+		if (this.y > document.documentElement.clientHeight - this.wnd.clientHeight) this.y = document.documentElement.clientHeight - this.wnd.clientHeight;
 		this.wnd.style.top = this.y + 'px';
 		this.wnd.style.left = this.x + 'px';
 	}
