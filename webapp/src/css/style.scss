@@ -268,3 +268,15 @@ html {
 button {
 	user-select: none;
 }
+
+
+#animWindow {
+	#animSelectContainer {
+		display: flex;
+		flex-direction: row;
+		#animPlayBtn {
+			align-self: flex-end;
+			margin-left: auto;
+		}
+	}
+}

@@ -32,6 +32,7 @@ export interface MSAgentClientEvents {
 	adduser: (user: User) => void;
 	remuser: (user: User) => void;
 	chat: (user: User, msg: string) => void;
+	animwindow: (animations: string[]) => void;
 }
 
 export interface APIAgentInfo {
@@ -218,6 +219,13 @@ export class MSAgentClient {
 	setContextMenu(user: User) {
 		let ctx = user.agent.getContextMenu();
 		ctx.clearItems();
+		// Animations
+		if (user.username === this.username) {
+			let anims = new ContextMenuItem('Animations', () => {
+				this.events.emit('animwindow', user.agent.listAnimations());
+			});
+			ctx.addItem(anims);
+		}
 		// Mute
 		let _user = user;
 		let mute = new ContextMenuItem('Mute', () => {

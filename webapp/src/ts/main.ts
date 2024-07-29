@@ -21,7 +21,10 @@ const elements = {
 	imageUploadBtn: document.getElementById('imageUploadBtn') as HTMLButtonElement,
 	chatSendBtn: document.getElementById('chatSendBtn') as HTMLButtonElement,
 
-	roomSettingsWindow: document.getElementById('roomSettingsWindow') as HTMLDivElement
+	roomSettingsWindow: document.getElementById('roomSettingsWindow') as HTMLDivElement,
+	animWindow: document.getElementById('animWindow') as HTMLDivElement,
+	animSelect: document.getElementById('animSelect') as HTMLSelectElement,
+	animPlayBtn: document.getElementById('animPlayBtn') as HTMLButtonElement,
 };
 
 let Room: MSAgentClient;
@@ -39,6 +42,16 @@ function roomInit() {
 		elements.logonView.style.display = 'block';
 		elements.chatView.style.display = 'none';
 	});
+	Room.on('animwindow', (animations) => {
+		elements.animSelect.innerHTML = '';
+		for (let anim of animations) {
+			let option = document.createElement('option');
+			option.innerText = anim;
+			option.value = anim;
+			elements.animSelect.appendChild(option);
+		}
+		animWindow.show();
+	});
 }
 
 let motdWindow = new MSWindow(elements.motdWindow, {
@@ -55,6 +68,16 @@ let roomSettingsWindow = new MSWindow(elements.roomSettingsWindow, {
 	minWidth: 398,
 	minHeight: 442,
 	startPosition: MSWindowStartPosition.Center
+});
+
+let animWindow = new MSWindow(elements.animWindow, {
+	minWidth: 200,
+	minHeight: 90,
+	startPosition: MSWindowStartPosition.Center
+});
+
+elements.animPlayBtn.addEventListener('click', () => {
+	Room?.animation(elements.animSelect.value);
 });
 
 logonWindow.show();

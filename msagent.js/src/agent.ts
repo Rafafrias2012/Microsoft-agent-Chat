@@ -432,4 +432,8 @@ export class Agent {
 		if (remove) this.remove();
 		else this.cnv.style.display = 'none';
 	}
+
+	listAnimations() {
+		return this.data.animInfo.map((n) => n.name);
+	}
 }
