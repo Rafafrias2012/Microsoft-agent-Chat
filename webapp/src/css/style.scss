@@ -84,7 +84,7 @@ html {
 	min-width: 250px;
 	@media screen and (min-width: 500px) {
 		min-width: 500px;
-	};
+	}
 }
 
 #logonWindowLogo {
@@ -268,7 +268,6 @@ html {
 button {
 	user-select: none;
 }
-
 
 #animWindow {
 	#animSelectContainer {

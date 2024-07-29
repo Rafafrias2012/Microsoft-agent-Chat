@@ -53,7 +53,6 @@ export interface MSAgentPlayAnimationMessage extends MSAgentProtocolMessage {
 	};
 }
 
-
 export interface MSAgentSendImageMessage extends MSAgentProtocolMessage {
 	op: MSAgentProtocolMessageType.SendImage;
 	data: {

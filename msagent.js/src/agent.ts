@@ -56,7 +56,7 @@ class AgentAnimationState {
 				this.finishCallback();
 				return;
 			}
-	
+
 			//@ts-ignore
 			this.interval = setTimeout(() => {
 				this.nextFrame();

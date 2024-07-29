@@ -24,7 +24,7 @@ const elements = {
 	roomSettingsWindow: document.getElementById('roomSettingsWindow') as HTMLDivElement,
 	animWindow: document.getElementById('animWindow') as HTMLDivElement,
 	animSelect: document.getElementById('animSelect') as HTMLSelectElement,
-	animPlayBtn: document.getElementById('animPlayBtn') as HTMLButtonElement,
+	animPlayBtn: document.getElementById('animPlayBtn') as HTMLButtonElement
 };
 
 let Room: MSAgentClient;

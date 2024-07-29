@@ -52,7 +52,7 @@ export class MSAgentChatRoom {
 			}
 		});
 		client.on('join', () => {
-			let agent = this.agents.find(a => a.filename === client.agent)!;
+			let agent = this.agents.find((a) => a.filename === client.agent)!;
 			let initmsg: MSAgentInitMessage = {
 				op: MSAgentProtocolMessageType.Init,
 				data: {
@@ -66,7 +66,7 @@ export class MSAgentChatRoom {
 								username: c.username!,
 								agent: c.agent!,
 								admin: c.admin,
-								animations: this.agents.find(a => a.filename === c.agent)!.animations
+								animations: this.agents.find((a) => a.filename === c.agent)!.animations
 							};
 						})
 				}
@@ -107,7 +107,7 @@ export class MSAgentChatRoom {
 			}
 			this.discord?.logMsg(client.username!, message);
 		});
-		client.on('animation', async anim => {
+		client.on('animation', async (anim) => {
 			let msg: MSAgentAnimationMessage = {
 				op: MSAgentProtocolMessageType.PlayAnimation,
 				data: {
