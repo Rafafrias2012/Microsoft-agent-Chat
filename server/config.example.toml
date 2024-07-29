@@ -23,6 +23,7 @@ bannedWords = []
 
 [chat.ratelimits]
 chat = {seconds = 10, limit = 8}
+anim = {seconds = 10, limit = 8}
 
 [motd]
 version = 1
@@ -58,71 +59,89 @@ expirySeconds = 60
 [[agents]]
 friendlyName = "Clippy"
 filename = "CLIPPIT.ACS"
+animations = { join = ["Greeting"], chat = ["Explain"], idle = [], leave = ["GoodBye"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Courtney"
 filename = "courtney.acs"
+animations = { join = ["Show", "Greet"], chat = ["GetAttentionMinor"], idle = [], leave = ["Disappear"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Dot"
 filename = "DOT.ACS"
+animations = { join = ["Greeting", "Show"], chat = ["Alert", "Show"], idle = [], leave = ["Goodbye"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Earl"
 filename = "earl.acs"
+animations = { join = ["Show", "Greet"], chat = ["LookUp"], idle = [], leave = ["Disappear"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "F1"
 filename = "F1.ACS"
+animations = { join = ["Show"], chat = ["Explain"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Genie"
 filename = "Genie.acs"
+animations = { join = ["Show"], chat = ["Suggest", "RestPose"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "James"
 filename = "James.acs"
+animations = { join = ["Show"], chat = ["Suggest", "RestPose"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Links"
 filename = "Links.ACS"
+animations = { join = ["Greeting"], chat = ["GetAttention"], idle = [], leave = ["GoodBye"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Merlin"
 filename = "merlin.acs"
+animations = { join = ["Show"], chat = ["Explain", "RestPose"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Mother Nature"
 filename = "Mother_NATURE.ACS"
+animations = { join = ["Greeting"], chat = ["Explain"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Office Logo"
 filename = "Office_Logo.ACS"
+animations = { join = ["Greeting"], chat = ["Explain"], idle = [], leave = ["Goodbye"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Peedy"
 filename = "Peedy.acs"
+animations = { join = ["Show", "Greet", "RestPose"], chat = ["Thinking", "RestPose"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
-#[[agents]]
-#friendlyName = "Question"
-#filename = "question_mark.acs"
+[[agents]]
+friendlyName = "Question"
+filename = "question_mark.acs"
+animations = { join = ["Welcome"], chat = ["Shimmer"], idle = [], leave = ["Fade"], rest = ["Restpose"] }
 
 [[agents]]
 friendlyName = "Robby"
 filename = "Robby.acs"
+animations = { join = ["Show", "Greet", "RestPose"], chat = ["Thinking", "RestPose"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Rocky"
 filename = "ROCKY.ACS"
+animations = { join = ["Show"], chat = ["Alert"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Rover"
 filename = "rover.acs"
+animations = { join = ["Show", "Greet", "RestPose"], chat = ["Thinking", "RestPose"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Victor"
 filename = "Victor.acs"
+animations = { join = ["Show", "Greet", "RestPose"], chat = ["Thinking", "RestPose"], idle = [], leave = ["Hide"], rest = ["RestPose"] }
 
 [[agents]]
 friendlyName = "Bonzi"
 filename = "Bonzi.acs"
+animations = { join = ["Show", "Wave", "RestPose"], chat = ["Giggle"], idle = [], leave = ["Hide"], rest = ["RestPose"] }

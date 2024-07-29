@@ -2,6 +2,7 @@ import { MSWindow, MSWindowStartPosition } from './MSWindow.js';
 import { agentInit } from '@msagent-chat/msagent.js';
 import { MSAgentClient } from './client.js';
 import { Config } from '../../config.js';
+import { RunCommand } from './commands.js';
 
 const elements = {
 	motdWindow: document.getElementById('motdWindow') as HTMLDivElement,
@@ -120,7 +121,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function talk() {
 	if (Room === null) return;
-	Room.talk(elements.chatInput.value);
+	let msg = elements.chatInput.value;
+	if (msg.startsWith('/')) {
+		RunCommand(msg, Room);
+	} else {
+		Room.talk(msg);
+	}
 	elements.chatInput.value = '';
 }
 

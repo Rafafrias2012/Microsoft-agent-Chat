@@ -9,11 +9,13 @@ import {
 	MSAgentAdminLoginResponse,
 	MSAgentAdminMessage,
 	MSAgentAdminOperation,
+	MSAgentAnimationMessage,
 	MSAgentChatMessage,
 	MSAgentErrorMessage,
 	MSAgentImageMessage,
 	MSAgentInitMessage,
 	MSAgentJoinMessage,
+	MSAgentPlayAnimationMessage,
 	MSAgentPromoteMessage,
 	MSAgentProtocolMessage,
 	MSAgentProtocolMessageType,
@@ -174,6 +176,16 @@ export class MSAgentClient {
 		this.send(talkMsg);
 	}
 
+	animation(anim: string) {
+		let msg: MSAgentPlayAnimationMessage = {
+			op: MSAgentProtocolMessageType.PlayAnimation,
+			data: {
+				anim
+			}
+		};
+		this.send(msg);
+	}
+
 	async sendImage(img: ArrayBuffer, type: string) {
 		// Upload image
 		let res = await fetch(this.url + '/api/upload', {
@@ -296,8 +308,9 @@ export class MSAgentClient {
 					let agent = await agentCreateCharacterFromUrl(this.url + '/api/agents/' + _user.agent);
 					agent.setUsername(_user.username, _user.admin ? '#FF0000' : '#000000');
 					agent.addToDom(this.agentContainer);
+					let user = new User(_user.username, agent, _user.animations);
 					agent.show();
-					let user = new User(_user.username, agent);
+					user.doAnim('join');
 					this.setContextMenu(user);
 					this.users.push(user);
 				}
@@ -309,8 +322,9 @@ export class MSAgentClient {
 				let agent = await agentCreateCharacterFromUrl(this.url + '/api/agents/' + addUserMsg.data.agent);
 				agent.setUsername(addUserMsg.data.username, '#000000');
 				agent.addToDom(this.agentContainer);
+				let user = new User(addUserMsg.data.username, agent, addUserMsg.data.animations);
 				agent.show();
-				let user = new User(addUserMsg.data.username, agent);
+				user.doAnim('join');
 				this.setContextMenu(user);
 				this.users.push(user);
 				this.events.emit('adduser', user);
@@ -320,7 +334,9 @@ export class MSAgentClient {
 				let remUserMsg = msg as MSAgentRemoveUserMessage;
 				let user = this.users.find((u) => u.username === remUserMsg.data.username);
 				if (!user) return;
-				user.agent.hide(true);
+				user.doAnim('leave').then(() => {
+					user.agent.hide(true);
+				});
 				if (this.playingAudio.has(user!.username)) {
 					this.playingAudio.get(user!.username)?.pause();
 					this.playingAudio.delete(user!.username);
@@ -337,6 +353,7 @@ export class MSAgentClient {
 				this.events.emit('chat', user, chatMsg.data.message);
 
 				user?.agent.speak(chatMsg.data.message);
+				user?.doAnim('chat');
 				let msgId = ++user!.msgId;
 
 				if (chatMsg.data.audio !== undefined) {
@@ -366,6 +383,14 @@ export class MSAgentClient {
 						}
 					}, 5000);
 				}
+				break;
+			}
+			case MSAgentProtocolMessageType.PlayAnimation: {
+				let animMsg = msg as MSAgentAnimationMessage;
+				let user = this.users.find((u) => u.username === animMsg.data.username);
+				if (!user || user.muted) return;
+				await user.agent.playAnimationByNamePromise(animMsg.data.anim);
+				await user.doAnim('rest');
 				break;
 			}
 			case MSAgentProtocolMessageType.SendImage: {

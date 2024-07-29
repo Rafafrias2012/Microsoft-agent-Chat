@@ -1,3 +1,5 @@
+import { AgentAnimationConfig } from "@msagent-chat/protocol";
+
 export interface IConfig {
 	http: {
 		host: string;
@@ -31,6 +33,7 @@ export interface ChatConfig {
 	bannedWords: string[];
 	ratelimits: {
 		chat: RateLimitConfig;
+		anim: RateLimitConfig;
 	};
 }
 
@@ -42,6 +45,7 @@ export interface motdConfig {
 export interface AgentConfig {
 	friendlyName: string;
 	filename: string;
+	animations: AgentAnimationConfig;
 }
 
 export interface RateLimitConfig {

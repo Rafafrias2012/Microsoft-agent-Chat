@@ -378,6 +378,12 @@ export class Agent {
 		if (index !== -1) this.playAnimation(index, finishCallback);
 	}
 
+	playAnimationByNamePromise(name: string): Promise<void> {
+		return new Promise((res, rej) => {
+			this.playAnimationByName(name, () => res());
+		});
+	}
+
 	setUsername(username: string, color: string) {
 		if (this.usernameBalloonState !== null) {
 			this.usernameBalloonState.finish();
@@ -420,13 +426,10 @@ export class Agent {
 		this.y = randint(0, document.documentElement.clientHeight - this.data.characterInfo.charHeight);
 		this.setLoc();
 		this.cnv.style.display = 'block';
-		this.playAnimationByName('Show', () => {});
 	}
 
 	hide(remove: boolean = false) {
-		this.playAnimationByName('Hide', () => {
-			if (remove) this.remove();
-			else this.cnv.style.display = 'none';
-		});
+		if (remove) this.remove();
+		else this.cnv.style.display = 'none';
 	}
 }

@@ -5,6 +5,7 @@ export enum MSAgentProtocolMessageType {
 	KeepAlive = 'nop',
 	Join = 'join',
 	Talk = 'talk',
+	PlayAnimation = 'anim',
 	SendImage = 'img',
 	Admin = 'admin',
 	// Server-to-client
@@ -18,6 +19,14 @@ export enum MSAgentProtocolMessageType {
 
 export interface MSAgentProtocolMessage {
 	op: MSAgentProtocolMessageType;
+}
+
+export interface AgentAnimationConfig {
+	join: string[];
+	chat: string[];
+	idle: string[];
+	rest: string[];
+	leave: string[];
 }
 
 // Client-to-server
@@ -36,6 +45,14 @@ export interface MSAgentTalkMessage extends MSAgentProtocolMessage {
 		msg: string;
 	};
 }
+
+export interface MSAgentPlayAnimationMessage extends MSAgentProtocolMessage {
+	op: MSAgentProtocolMessageType.PlayAnimation;
+	data: {
+		anim: string;
+	};
+}
+
 
 export interface MSAgentSendImageMessage extends MSAgentProtocolMessage {
 	op: MSAgentProtocolMessageType.SendImage;
@@ -56,6 +73,7 @@ export interface MSAgentInitMessage extends MSAgentProtocolMessage {
 			username: string;
 			agent: string;
 			admin: boolean;
+			animations: AgentAnimationConfig;
 		}[];
 	};
 }
@@ -65,6 +83,7 @@ export interface MSAgentAddUserMessage extends MSAgentProtocolMessage {
 	data: {
 		username: string;
 		agent: string;
+		animations: AgentAnimationConfig;
 	};
 }
 
@@ -81,6 +100,14 @@ export interface MSAgentChatMessage extends MSAgentProtocolMessage {
 		username: string;
 		message: string;
 		audio?: string | undefined;
+	};
+}
+
+export interface MSAgentAnimationMessage extends MSAgentProtocolMessage {
+	op: MSAgentProtocolMessageType.PlayAnimation;
+	data: {
+		username: string;
+		anim: string;
 	};
 }
 

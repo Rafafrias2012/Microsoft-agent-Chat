@@ -1,10 +1,10 @@
 import {
 	MSAgentAddUserMessage,
+	MSAgentAnimationMessage,
 	MSAgentChatMessage,
 	MSAgentImageMessage,
 	MSAgentInitMessage,
 	MSAgentPromoteMessage,
-	MSAgentProtocolMessage,
 	MSAgentProtocolMessageType,
 	MSAgentRemoveUserMessage
 } from '@msagent-chat/protocol';
@@ -52,6 +52,7 @@ export class MSAgentChatRoom {
 			}
 		});
 		client.on('join', () => {
+			let agent = this.agents.find(a => a.filename === client.agent)!;
 			let initmsg: MSAgentInitMessage = {
 				op: MSAgentProtocolMessageType.Init,
 				data: {
@@ -64,7 +65,8 @@ export class MSAgentChatRoom {
 							return {
 								username: c.username!,
 								agent: c.agent!,
-								admin: c.admin
+								admin: c.admin,
+								animations: this.agents.find(a => a.filename === c.agent)!.animations
 							};
 						})
 				}
@@ -74,7 +76,8 @@ export class MSAgentChatRoom {
 				op: MSAgentProtocolMessageType.AddUser,
 				data: {
 					username: client.username!,
-					agent: client.agent!
+					agent: client.agent!,
+					animations: agent.animations
 				}
 			};
 			for (const _client of this.getActiveClients().filter((c) => c !== client)) {
@@ -103,6 +106,18 @@ export class MSAgentChatRoom {
 				_client.send(msg);
 			}
 			this.discord?.logMsg(client.username!, message);
+		});
+		client.on('animation', async anim => {
+			let msg: MSAgentAnimationMessage = {
+				op: MSAgentProtocolMessageType.PlayAnimation,
+				data: {
+					username: client.username!,
+					anim: anim
+				}
+			};
+			for (const _client of this.getActiveClients()) {
+				_client.send(msg);
+			}
 		});
 		client.on('image', async (id) => {
 			if (!this.img.has(id)) return;

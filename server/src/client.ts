@@ -14,7 +14,8 @@ import {
 	MSAgentJoinMessage,
 	MSAgentProtocolMessage,
 	MSAgentProtocolMessageType,
-	MSAgentTalkMessage
+	MSAgentTalkMessage,
+	MSAgentPlayAnimationMessage
 } from '@msagent-chat/protocol';
 import { MSAgentChatRoom } from './room.js';
 import * as htmlentities from 'html-entities';
@@ -27,6 +28,7 @@ export interface Client {
 	on(event: 'join', listener: () => void): this;
 	on(event: 'close', listener: () => void): this;
 	on(event: 'talk', listener: (msg: string) => void): this;
+	on(event: 'animation', listener: (anim: string) => void): this;
 	on(event: 'image', listener: (id: string) => void): this;
 
 	on(event: string, listener: Function): this;
@@ -45,6 +47,7 @@ export class Client extends EventEmitter {
 	nopLevel: number;
 
 	chatRateLimit: RateLimiter;
+	animRateLimit: RateLimiter;
 
 	constructor(socket: WebSocket, room: MSAgentChatRoom, ip: string) {
 		super();
@@ -58,6 +61,7 @@ export class Client extends EventEmitter {
 		this.nopLevel = 0;
 
 		this.chatRateLimit = new RateLimiter(this.room.config.ratelimits.chat);
+		this.animRateLimit = new RateLimiter(this.room.config.ratelimits.anim);
 
 		this.socket.on('message', (msg, isBinary) => {
 			if (isBinary) {
@@ -160,6 +164,12 @@ export class Client extends EventEmitter {
 					return;
 				}
 				this.emit('talk', talkMsg.data.msg);
+				break;
+			}
+			case MSAgentProtocolMessageType.PlayAnimation: {
+				let animMsg = msg as MSAgentPlayAnimationMessage;
+				if (!animMsg.data || !animMsg.data.anim || !this.animRateLimit.request()) return;
+				this.emit('animation', animMsg.data.anim);
 				break;
 			}
 			case MSAgentProtocolMessageType.SendImage: {
