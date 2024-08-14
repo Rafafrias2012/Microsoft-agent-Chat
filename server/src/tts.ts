@@ -5,15 +5,18 @@ import { Readable } from 'node:stream';
 import { ReadableStream } from 'node:stream/web';
 import { finished } from 'node:stream/promises';
 import ffmpeg from 'fluent-ffmpeg';
+import { Logger } from 'pino';
 
 export class TTSClient {
 	private config: TTSConfig;
 	private deleteOps: Map<string, NodeJS.Timeout>;
+	private logger: Logger;
 
-	constructor(config: TTSConfig) {
+	constructor(config: TTSConfig, logger: Logger) {
 		this.config = config;
 		if (!this.config.tempDir.endsWith('/')) this.config.tempDir += '/';
 		this.deleteOps = new Map();
+		this.logger = logger;
 	}
 
 	async ensureDirectoryExists() {
@@ -24,7 +27,7 @@ export class TTSClient {
 			let error = e as NodeJS.ErrnoException;
 			switch (error.code) {
 				case 'ENOTDIR': {
-					console.warn('File exists at TTS temp directory path. Unlinking...');
+					this.logger.warn('File exists at TTS temp directory path. Unlinking...');
 					await fs.unlink(this.config.tempDir.substring(0, this.config.tempDir.length - 1));
 					// intentional fall-through
 				}
@@ -33,7 +36,7 @@ export class TTSClient {
 					break;
 				}
 				default: {
-					console.error(`Cannot access TTS Temp dir: ${error.message}`);
+					this.logger.error(`Cannot access TTS Temp dir: ${error.message}`);
 					process.exit(1);
 					break;
 				}

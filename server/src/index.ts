@@ -1,4 +1,4 @@
-import Fastify from 'fastify';
+import Fastify, { FastifyInstance } from 'fastify';
 import FastifyWS from '@fastify/websocket';
 import FastifyStatic from '@fastify/static';
 import FastifyCors from '@fastify/cors';
@@ -14,6 +14,11 @@ import { Database } from './database.js';
 import { MSAgentErrorMessage, MSAgentProtocolMessageType } from '@msagent-chat/protocol';
 import { DiscordLogger } from './discord.js';
 import { ImageUploader } from './imageuploader.js';
+import pino from 'pino';
+
+let rootLogger = pino({
+	name: 'MSAgentChat'
+});
 
 let config: IConfig;
 let configPath: string;
@@ -21,7 +26,7 @@ if (process.argv.length < 3) configPath = './config.toml';
 else configPath = process.argv[2];
 
 if (!fs.existsSync(configPath)) {
-	console.error(`${configPath} not found. Please copy config.example.toml and fill out fields.`);
+	rootLogger.error(`${configPath} not found. Please copy config.example.toml and fill out fields.`);
 	process.exit(1);
 }
 
@@ -29,7 +34,7 @@ try {
 	let configRaw = fs.readFileSync(configPath, 'utf-8');
 	config = toml.parse(configRaw);
 } catch (e) {
-	console.error(`Failed to read or parse ${configPath}: ${(e as Error).message}`);
+	rootLogger.error(`Failed to read or parse ${configPath}: ${(e as Error).message}`);
 	process.exit(1);
 }
 
@@ -37,9 +42,9 @@ let db = new Database(config.mysql);
 await db.init();
 
 const app = Fastify({
-	logger: true,
-	bodyLimit: 20971520
-});
+	logger: rootLogger.child({ module: 'HTTP' }),
+	bodyLimit: 20971520,
+}) as unknown as FastifyInstance; // fastify please fix your shit
 
 app.register(FastifyCors, {
 	origin: config.http.origins,
@@ -51,7 +56,7 @@ app.register(FastifyWS);
 let tts = null;
 
 if (config.tts.enabled) {
-	tts = new TTSClient(config.tts);
+	tts = new TTSClient(config.tts, rootLogger.child({module: "TTS"}));
 	app.register(FastifyStatic, {
 		root: config.tts.tempDir,
 		prefix: '/api/tts/',
@@ -61,13 +66,13 @@ if (config.tts.enabled) {
 
 if (!config.chat.agentsDir.endsWith('/')) config.chat.agentsDir += '/';
 if (!fs.existsSync(config.chat.agentsDir)) {
-	console.error(`Directory ${config.chat.agentsDir} does not exist.`);
+	rootLogger.error(`Directory ${config.chat.agentsDir} does not exist.`);
 	process.exit(1);
 }
 
 for (let agent of config.agents) {
 	if (!fs.existsSync(path.join(config.chat.agentsDir, agent.filename))) {
-		console.error(`${agent.filename} does not exist.`);
+		rootLogger.error(`${agent.filename} does not exist.`);
 		process.exit(1);
 	}
 }
@@ -103,7 +108,7 @@ if (config.discord.enabled) {
 // Image upload
 let img = new ImageUploader(app, config.images);
 
-let room = new MSAgentChatRoom(config.chat, config.agents, db, img, tts, discord);
+let room = new MSAgentChatRoom(config.chat, rootLogger.child({module: "Room#Default"}), config.agents, db, img, tts, discord);
 
 app.register(async (app) => {
 	app.get('/api/socket', { websocket: true }, async (socket, req) => {
@@ -111,7 +116,7 @@ app.register(async (app) => {
 		let ip: string;
 		if (config.http.proxied) {
 			if (req.headers['x-forwarded-for'] === undefined) {
-				console.error(`Warning: X-Forwarded-For not set! This is likely a misconfiguration of your reverse proxy.`);
+				rootLogger.child({module: "HTTP"}).error(`Warning: X-Forwarded-For not set! This is likely a misconfiguration of your reverse proxy.`);
 				socket.close();
 				return;
 			}
@@ -119,7 +124,7 @@ app.register(async (app) => {
 			if (xff instanceof Array) ip = xff[0];
 			else ip = xff;
 			if (!isIP(ip)) {
-				console.error(`Warning: X-Forwarded-For malformed! This is likely a misconfiguration of your reverse proxy.`);
+				rootLogger.child({module: "HTTP"}).error(`Warning: X-Forwarded-For malformed! This is likely a misconfiguration of your reverse proxy.`);
 				socket.close();
 				return;
 			}

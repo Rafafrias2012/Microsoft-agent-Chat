@@ -15,6 +15,7 @@ import * as htmlentities from 'html-entities';
 import { Database } from './database.js';
 import { DiscordLogger } from './discord.js';
 import { ImageUploader } from './imageuploader.js';
+import { Logger } from 'pino';
 
 export class MSAgentChatRoom {
 	agents: AgentConfig[];
@@ -25,8 +26,9 @@ export class MSAgentChatRoom {
 	db: Database;
 	img: ImageUploader;
 	discord: DiscordLogger | null;
+	private logger: Logger;
 
-	constructor(config: ChatConfig, agents: AgentConfig[], db: Database, img: ImageUploader, tts: TTSClient | null, discord: DiscordLogger | null) {
+	constructor(config: ChatConfig, logger: Logger, agents: AgentConfig[], db: Database, img: ImageUploader, tts: TTSClient | null, discord: DiscordLogger | null) {
 		this.agents = agents;
 		this.clients = [];
 		this.config = config;
@@ -34,11 +36,18 @@ export class MSAgentChatRoom {
 		this.db = db;
 		this.img = img;
 		this.discord = discord;
+		this.logger = logger;
 	}
 
 	addClient(client: Client) {
 		this.clients.push(client);
+		this.logger.info(`New connection from ${client.ip}`);
 		client.on('close', () => {
+			if (client.username === null) {
+				this.logger.info(`${client.ip} disconnected`);
+			} else {
+				this.logger.info(`${client.ip} disconnected (${client.username})`);
+			}
 			this.clients.splice(this.clients.indexOf(client), 1);
 			if (client.username === null) return;
 			let msg: MSAgentRemoveUserMessage = {
@@ -52,6 +61,7 @@ export class MSAgentChatRoom {
 			}
 		});
 		client.on('join', () => {
+			this.logger.info(`${client.ip} joined as ${client.username}`);
 			let agent = this.agents.find((a) => a.filename === client.agent)!;
 			let initmsg: MSAgentInitMessage = {
 				op: MSAgentProtocolMessageType.Init,
@@ -99,7 +109,7 @@ export class MSAgentChatRoom {
 					let filename = await this.tts.synthesizeToFile(message, (++this.msgId).toString(10));
 					msg.data.audio = '/api/tts/' + filename;
 				} catch (e) {
-					console.error(`Error synthesizing TTS: ${(e as Error).message}`);
+					this.logger.error(`Error synthesizing TTS: ${(e as Error).message}`);
 				}
 			}
 			for (const _client of this.getActiveClients()) {
