@@ -1,4 +1,4 @@
-import { Agent } from '@msagent-chat/msagent.js';
+import { Agent } from '@msagent.js/web';
 import { AgentAnimationConfig } from '@msagent-chat/protocol';
 
 export class User {
