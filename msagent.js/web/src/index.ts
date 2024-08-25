@@ -1,6 +1,7 @@
 import { compressInit } from '@msagent.js/core';
 import { wordballoonInit } from './wordballoon.js';
 
+export { Agent } from './agent.js';
 export * from './character.js';
 export * from './sprite.js';
 export * from './wordballoon.js';

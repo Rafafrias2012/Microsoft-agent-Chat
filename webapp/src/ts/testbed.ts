@@ -2,6 +2,8 @@
 // This will go away when it isn't needed
 
 import * as msagent from '@msagent.js/web';
+import * as msagent_core from '@msagent.js/core';
+
 let w = window as any;
 w.agents = [];
 let input = document.getElementById('testbed-input') as HTMLInputElement;
@@ -12,7 +14,8 @@ input.addEventListener('change', async () => {
 	let buffer = await input.files![0].arrayBuffer();
 
 	console.log('Creating agent');
-	let agent = msagent.agentCreateCharacter(new Uint8Array(buffer));
+	let agentParsedData = msagent_core.agentCharacterParseACS(new msagent_core.BufferStream(new Uint8Array(buffer)));
+	let agent = new msagent.Agent(agentParsedData);
 
 	w.agents.push(agent);
 

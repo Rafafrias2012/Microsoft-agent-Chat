@@ -9,4 +9,5 @@ export * from './structs/image.js';
 export * from './types.js';
 export * from './decompress.js';
 
+export * from './image.js';
 export * from './parse.js';
