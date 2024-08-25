@@ -1,9 +1,9 @@
-import { BufferStream, SeekDir } from './buffer.js';
+import { BufferStream, SeekDir } from '@msagent.js/core';
 
-import { LOCATION } from './structs/core.js';
-import { AcsCharacterInfo } from './structs/character.js';
-import { AcsAnimationEntry } from './structs/animation.js';
-import { AcsImageEntry } from './structs/image.js';
+import { LOCATION } from '@msagent.js/core';
+import { AcsCharacterInfo } from '@msagent.js/core';
+import { AcsAnimationEntry } from '@msagent.js/core';
+import { AcsImageEntry } from '@msagent.js/core';
 import { Agent } from './agent.js';
 
 // Data

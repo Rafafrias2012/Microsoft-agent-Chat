@@ -1,7 +1,7 @@
 // Testbed code
 // This will go away when it isn't needed
 
-import * as msagent from '@msagent-chat/msagent.js';
+import * as msagent from '@msagent.js/web';
 let w = window as any;
 w.agents = [];
 let input = document.getElementById('testbed-input') as HTMLInputElement;

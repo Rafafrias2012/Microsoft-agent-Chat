@@ -4,7 +4,8 @@
     "server",
     "webapp",
     "protocol",
-    "msagent.js"
+    "msagent.js/core",
+    "msagent.js/web"
   ],
   "scripts": {
     "format": "prettier --write **/*.{ts,html,scss}",

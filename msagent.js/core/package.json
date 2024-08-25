@@ -1,5 +1,5 @@
 {
-  "name": "@msagent-chat/msagent.js",
+  "name": "@msagent.js/core",
   "version": "0.1.0",
   "packageManager": "yarn@4.2.2",
   "devDependencies": {

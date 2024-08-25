@@ -1,5 +1,5 @@
 import { MSWindow, MSWindowStartPosition } from './MSWindow.js';
-import { agentInit } from '@msagent-chat/msagent.js';
+import { agentInit } from '@msagent.js/web';
 import { MSAgentClient } from './client.js';
 import { Config } from '../../config.js';
 import { RunCommand } from './commands.js';

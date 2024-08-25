@@ -478,16 +478,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@msagent-chat/msagent.js@npm:*, @msagent-chat/msagent.js@workspace:msagent.js":
-  version: 0.0.0-use.local
-  resolution: "@msagent-chat/msagent.js@workspace:msagent.js"
-  dependencies:
-    "@parcel/core": "npm:^2.12.0"
-    parcel: "npm:^2.12.0"
-    typescript: "npm:^5.5.3"
-  languageName: unknown
-  linkType: soft
-
 "@msagent-chat/protocol@workspace:protocol":
   version: 0.0.0-use.local
   resolution: "@msagent-chat/protocol@workspace:protocol"
@@ -525,12 +515,33 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@msagent-chat/webapp@workspace:webapp"
   dependencies:
-    "@msagent-chat/msagent.js": "npm:*"
+    "@msagent.js/web": "npm:*"
     "@parcel/core": "npm:^2.12.0"
     nanoevents: "npm:^9.0.0"
     parcel: "npm:^2.12.0"
     run-script-os: "npm:^1.1.6"
     sharp: "npm:^0.31.1"
+    typescript: "npm:^5.5.3"
+  languageName: unknown
+  linkType: soft
+
+"@msagent.js/core@npm:*, @msagent.js/core@workspace:msagent.js/core":
+  version: 0.0.0-use.local
+  resolution: "@msagent.js/core@workspace:msagent.js/core"
+  dependencies:
+    "@parcel/core": "npm:^2.12.0"
+    parcel: "npm:^2.12.0"
+    typescript: "npm:^5.5.3"
+  languageName: unknown
+  linkType: soft
+
+"@msagent.js/web@npm:*, @msagent.js/web@workspace:msagent.js/web":
+  version: 0.0.0-use.local
+  resolution: "@msagent.js/web@workspace:msagent.js/web"
+  dependencies:
+    "@msagent.js/core": "npm:*"
+    "@parcel/core": "npm:^2.12.0"
+    parcel: "npm:^2.12.0"
     typescript: "npm:^5.5.3"
   languageName: unknown
   linkType: soft

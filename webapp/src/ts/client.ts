@@ -24,7 +24,7 @@ import {
 	MSAgentTalkMessage
 } from '@msagent-chat/protocol';
 import { User } from './user';
-import { agentCreateCharacterFromUrl, ContextMenuItem } from '@msagent-chat/msagent.js';
+import { agentCreateCharacterFromUrl, ContextMenuItem } from '@msagent.js/web';
 
 export interface MSAgentClientEvents {
 	close: () => void;

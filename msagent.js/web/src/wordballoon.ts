@@ -1,5 +1,5 @@
 import { spriteCutSpriteFromSpriteSheet, spriteDraw, spriteDrawRotated, spriteLoadImage } from './sprite';
-import { Point, Rect, Size } from './types';
+import { Point, Rect, Size } from '@msagent.js/core';
 
 let corner_sprite: HTMLImageElement;
 let straight_sprite: HTMLImageElement;

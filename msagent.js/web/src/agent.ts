@@ -1,9 +1,9 @@
-import { BufferStream, SeekDir } from './buffer.js';
+import { BufferStream, SeekDir } from '@msagent.js/core';
 import { AcsData } from './character.js';
 import { ContextMenu, ContextMenuItem } from './contextmenu.js';
-import { AcsAnimation, AcsAnimationFrameInfo } from './structs/animation.js';
-import { AcsImageEntry } from './structs/image.js';
-import { Point, Size } from './types.js';
+import { AcsAnimation, AcsAnimationFrameInfo } from '@msagent.js/core';
+import { AcsImageEntry } from '@msagent.js/core';
+import { Point, Size } from '@msagent.js/core';
 import { wordballoonDrawImage, wordballoonDrawText } from './wordballoon.js';
 
 // probably should be in a utility module

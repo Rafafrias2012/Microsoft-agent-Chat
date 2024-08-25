@@ -1,6 +1,6 @@
 // Sprite utilities
 
-import { Rect } from './types';
+import { Rect } from '@msagent.js/core';
 
 // Load a image asynchronously
 export async function spriteLoadImage(uri: string): Promise<HTMLImageElement> {

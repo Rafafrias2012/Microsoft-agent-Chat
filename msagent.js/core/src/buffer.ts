@@ -94,8 +94,13 @@ export class BufferStream {
 	withOffset(where: number, cb: () => void) {
 		let last = this.tell();
 		this.seek(where, SeekDir.BEG);
-		cb();
-		this.seek(last, SeekDir.BEG);
+		try {
+			cb();
+		} catch(_) {
+			throw _;
+		} finally {
+			this.seek(last, SeekDir.BEG);
+		}
 	}
 
 	readBool(): boolean {

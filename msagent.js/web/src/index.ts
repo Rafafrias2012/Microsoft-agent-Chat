@@ -1,9 +1,7 @@
-import { compressInit } from './decompress.js';
+import { compressInit } from '@msagent.js/core';
 import { wordballoonInit } from './wordballoon.js';
 
-export * from './types.js';
 export * from './character.js';
-export * from './decompress.js';
 export * from './sprite.js';
 export * from './wordballoon.js';
 export * from './contextmenu.js';
