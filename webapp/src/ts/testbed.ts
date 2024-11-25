@@ -22,6 +22,7 @@ input.addEventListener('change', async () => {
 	agent.addToDom(mount);
 
 	agent.show();
+	await agent.playAnimationByNamePromise("Show");
 	console.log('Agent created');
 });
 
@@ -31,13 +32,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 let form = document.getElementById('acsUrlForm') as HTMLFormElement;
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	let url = (document.getElementById('acsUrl') as HTMLInputElement).value;
-	msagent.agentCreateCharacterFromUrl(url).then((agent) => {
-		w.agents.push(agent);
-		agent.addToDom(document.body);
-		agent.show();
-		console.log(`Loaded agent from ${url}`);
-	});
+	let agent = await msagent.agentCreateCharacterFromUrl(url)
+	w.agents.push(agent);
+	agent.addToDom(document.body);
+
+	agent.show();
+	await agent.playAnimationByNamePromise("Show");
+	
+	console.log(`Loaded agent from ${url}`);
 });
