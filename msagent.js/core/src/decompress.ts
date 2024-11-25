@@ -1,21 +1,19 @@
-// Please note that the "meaningless" shifts of 0 are to force
-// the value to be a 32-bit integer. Do not remove them.
+import { WasmModule, WebassemblyOwnMemoryExports } from './wasm_module';
 
-let compressWasm: WebAssembly.WebAssemblyInstantiatedSource;
-
-interface CompressWasmExports {
-	memory: WebAssembly.Memory;
-	agentDecompressWASM: any;
+// WASM exports for the decompression module.
+interface CompressWasmExports extends WebassemblyOwnMemoryExports {
+	agentDecompressWASM: (pSource: number, sourceLen: number, pDest: number, destLen: number) => number;
 }
+
+let compressWasm = new WasmModule<CompressWasmExports>(new URL('decompress.wasm', import.meta.url));
 
 // Initalize the decompression module
 export async function compressInit() {
-	let url = new URL('decompress.wasm', import.meta.url);
-	compressWasm = await WebAssembly.instantiateStreaming(fetch(url));
+	await compressWasm.Initalize();
 }
 
 function compressWasmGetExports() {
-	return compressWasm.instance.exports as any as CompressWasmExports;
+	return compressWasm.Exports;
 }
 
 function compressWASMGetMemory(): WebAssembly.Memory {
@@ -32,14 +30,9 @@ function compressWASMGetMemory(): WebAssembly.Memory {
 export function compressDecompress(src: Uint8Array, dest: Uint8Array) {
 	// Grow the WASM heap if needed. Funnily enough, this code is never hit in most
 	// ACSes, so IDK if it's even needed
-	let memory = compressWASMGetMemory();
-	if (memory.buffer.byteLength < src.length + dest.length) {
-		// A WebAssembly page is 64kb, so we need to grow at least that much
-		let npages = Math.floor((src.length + dest.length) / 65535) + 1;
-		console.log('Need to grow WASM heap', npages, 'pages', '(current byteLength is', memory.buffer.byteLength, ', we need', src.length + dest.length, ')');
-		memory.grow(npages);
-	}
+	compressWasm.growHeapTo(src.length + dest.length);
 
+	let memory = compressWASMGetMemory();
 	let copyBuffer = new Uint8Array(memory.buffer);
 
 	// Copy source to memory[0]. This will make things a bit simpler
@@ -50,6 +43,7 @@ export function compressDecompress(src: Uint8Array, dest: Uint8Array) {
 
 	if (nrBytesDecompressed != dest.length) throw new Error(`decompression failed: ${nrBytesDecompressed} != ${dest.length}`);
 
-	// Dest will be memory[src.length..dest.length]
+	// The uncompressed data is located at memory[src.length..dest.length].
+	// Copy it into the destination buffer.
 	dest.set(copyBuffer.slice(src.length, src.length + dest.length), 0);
 }

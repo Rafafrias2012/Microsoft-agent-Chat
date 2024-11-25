@@ -38,7 +38,8 @@ export function imageDrawToBuffer(imageEntry: AcsImageEntry, palette: RGBAColor[
 		bufStream.seek(dwAlign(bufStream.tell()), SeekDir.BEG);
 	}
 
-	// Next, draw the rows converted to RGBA, top down (so it's drawn as you'd expect)
+	// Next, draw the rows converted to RGBA, top down (so it's drawn correctly,
+	// and in the RGBA format we want to return)
 	for (let y = 0; y < imageEntry.image.height - 1; ++y) {
 		let row = rows[y];
 		for (let x = 0; x < imageEntry.image.width; ++x) {

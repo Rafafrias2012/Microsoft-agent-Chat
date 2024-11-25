@@ -5,6 +5,11 @@ import { Agent } from './agent.js';
 let acsDataCache = new Map<string, AcsData>();
 
 // Purges the ACS cache.
+//
+// FIXME: A smarter way to do this would probably be instead reference count
+// AcsData instances, then when an agent is disposed decrement reference count
+// (or leave it at 0). Once it's 0 then a globally running interval can remove
+// all keys that have no refcount.
 export function agentPurgeACSCache() {
 	acsDataCache.clear();
 }

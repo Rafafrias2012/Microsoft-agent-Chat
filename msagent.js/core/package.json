@@ -1,5 +1,6 @@
 {
   "name": "@msagent.js/core",
+  "description": "msagent.js core. Provides structures, parsing, and bitmap utilties for higher level usage",
   "version": "0.1.0",
   "packageManager": "yarn@4.2.2",
   "devDependencies": {
