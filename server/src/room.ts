@@ -27,8 +27,9 @@ export class MSAgentChatRoom {
 	img: ImageUploader;
 	discord: DiscordLogger | null;
 	private logger: Logger;
+	private id: string;
 
-	constructor(config: ChatConfig, logger: Logger, agents: AgentConfig[], db: Database, img: ImageUploader, tts: TTSClient | null, discord: DiscordLogger | null) {
+	constructor(id: string, config: ChatConfig, logger: Logger, agents: AgentConfig[], db: Database, img: ImageUploader, tts: TTSClient | null, discord: DiscordLogger | null) {
 		this.agents = agents;
 		this.clients = [];
 		this.config = config;
@@ -37,6 +38,7 @@ export class MSAgentChatRoom {
 		this.img = img;
 		this.discord = discord;
 		this.logger = logger;
+		this.id = id;
 	}
 
 	addClient(client: Client) {
@@ -106,7 +108,7 @@ export class MSAgentChatRoom {
 			};
 			if (this.tts !== null) {
 				try {
-					let filename = await this.tts.synthesizeToFile(message, (++this.msgId).toString(10));
+					let filename = await this.tts.synthesizeToFile(message, `${this.id}-${++this.msgId}`);
 					msg.data.audio = '/api/tts/' + filename;
 				} catch (e) {
 					this.logger.error(`Error synthesizing TTS: ${(e as Error).message}`);

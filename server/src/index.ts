@@ -108,7 +108,7 @@ if (config.discord.enabled) {
 // Image upload
 let img = new ImageUploader(app, config.images);
 
-let primaryRoom = new MSAgentChatRoom(config.chat, rootLogger.child({module: "Room#Default"}), config.agents, db, img, tts, discord);
+let primaryRoom = new MSAgentChatRoom("default", config.chat, rootLogger.child({module: "Room#Default"}), config.agents, db, img, tts, discord);
 
 let rooms = new Map<string, MSAgentChatRoom>();
 
@@ -153,7 +153,7 @@ app.register(async (app) => {
 			if (rooms.has(requestedRoom)) {
 				room = rooms.get(requestedRoom)!;
 			} else {
-				room = new MSAgentChatRoom(config.chat, rootLogger.child({module: `Room#${requestedRoom}`}), config.agents, db, img, tts, null);
+				room = new MSAgentChatRoom(requestedRoom, config.chat, rootLogger.child({module: `Room#${requestedRoom}`}), config.agents, db, img, tts, null);
 				rooms.set(requestedRoom, room);
 			}
 		} else {
