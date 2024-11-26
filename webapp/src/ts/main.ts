@@ -13,6 +13,7 @@ const elements = {
 	logonWindow: document.getElementById('logonWindow') as HTMLDivElement,
 	logonForm: document.getElementById('logonForm') as HTMLFormElement,
 	logonUsername: document.getElementById('logonUsername') as HTMLInputElement,
+	logonRoom: document.getElementById('logonRoom') as HTMLInputElement,
 	logonButton: document.getElementById('logonButton') as HTMLButtonElement,
 	agentSelect: document.getElementById('agentSelect') as HTMLSelectElement,
 
@@ -108,6 +109,9 @@ async function connectToRoom() {
 	if (loggingIn) return;
 	loggingIn = true;
 	elements.logonButton.disabled = true;
+	if (elements.logonRoom.value) {
+		Room.setRoom(elements.logonRoom.value);
+	}
 	await Room.connect();
 	await Room.join(elements.logonUsername.value, elements.agentSelect.value);
 	elements.chatInput.maxLength = Room.getCharlimit();

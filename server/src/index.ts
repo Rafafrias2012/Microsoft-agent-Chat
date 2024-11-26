@@ -108,7 +108,9 @@ if (config.discord.enabled) {
 // Image upload
 let img = new ImageUploader(app, config.images);
 
-let room = new MSAgentChatRoom(config.chat, rootLogger.child({module: "Room#Default"}), config.agents, db, img, tts, discord);
+let primaryRoom = new MSAgentChatRoom(config.chat, rootLogger.child({module: "Room#Default"}), config.agents, db, img, tts, discord);
+
+let rooms = new Map<string, MSAgentChatRoom>();
 
 app.register(async (app) => {
 	app.get('/api/socket', { websocket: true }, async (socket, req) => {
@@ -143,6 +145,21 @@ app.register(async (app) => {
 			});
 			return;
 		}
+
+		let room : MSAgentChatRoom;
+
+		if ((req.query as any).room !== undefined) {
+			let requestedRoom = (req.query as any).room;
+			if (rooms.has(requestedRoom)) {
+				room = rooms.get(requestedRoom)!;
+			} else {
+				room = new MSAgentChatRoom(config.chat, rootLogger.child({module: `Room#${requestedRoom}`}), config.agents, db, img, tts, null);
+				rooms.set(requestedRoom, room);
+			}
+		} else {
+			room = primaryRoom;
+		}
+
 		let o = room.clients.filter((c) => c.ip === ip);
 		if (o.length >= config.chat.maxConnectionsPerIP) {
 			o[0].socket.close();

@@ -56,6 +56,7 @@ export class MSAgentClient {
 	private loginCb: (e: KeyboardEvent) => void;
 
 	private username: string | null = null;
+	private room: string | null = null;
 	private agentContainer: HTMLElement;
 	private agent: string | null = null;
 
@@ -82,6 +83,13 @@ export class MSAgentClient {
 
 	on<E extends keyof MSAgentClientEvents>(event: E, callback: MSAgentClientEvents[E]): Unsubscribe {
 		return this.events.on(event, callback);
+	}
+
+	setRoom(room: string) {
+		if (this.socket !== null) {
+			throw new Error('Cannot set room while connected');
+		}
+		this.room = room;
 	}
 
 	async getAgents() {
@@ -122,6 +130,9 @@ export class MSAgentClient {
 					throw new Error(`Unknown protocol ${url.protocol}`);
 			}
 			url.pathname = '/api/socket';
+			if (this.room !== null) {
+				url.searchParams.set('room', this.room);
+			}
 			this.socket = new WebSocket(url);
 			this.socket.addEventListener('open', () => res());
 			this.socket.addEventListener('message', (e) => {
