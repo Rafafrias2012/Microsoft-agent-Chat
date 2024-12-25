@@ -223,6 +223,25 @@ export class MSAgentClient {
 		this.send(msg);
 	}
 
+async changeAgent(newAgent: string) {
+    let agents = await this.getAgents();
+    // Check if the requested agent exists
+    if (!agents.some(a => a.filename === newAgent)) {
+        console.error('Invalid agent selected');
+        return;
+    }
+    
+    let msg: MSAgentProtocolMessage = {
+        op: MSAgentProtocolMessageType.ChangeAgent,
+        data: {
+            agent: newAgent
+        }
+    };
+    this.agent = newAgent;
+    await this.send(msg);
+    localStorage.setItem('MSAgent', newAgent);
+}
+
 	getCharlimit() {
 		return this.charlimit;
 	}
