@@ -21,7 +21,8 @@ import {
 	MSAgentProtocolMessageType,
 	MSAgentRemoveUserMessage,
 	MSAgentSendImageMessage,
-	MSAgentTalkMessage
+	MSAgentTalkMessage,
+	MSAgentChangeAgentMessage
 } from '@msagent-chat/protocol';
 import { User } from './user';
 import { agentCreateCharacterFromUrl, ContextMenuItem } from '@msagent-chat/msagent.js';
