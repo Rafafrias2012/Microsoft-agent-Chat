@@ -14,7 +14,8 @@ export enum MSAgentProtocolMessageType {
 	RemoveUser = 'remuser',
 	Chat = 'chat',
 	Promote = 'promote',
-	Error = 'error'
+	Error = 'error',
+	ChangeAgent = 'change_agent'
 }
 
 export interface MSAgentProtocolMessage {
@@ -130,4 +131,10 @@ export interface MSAgentErrorMessage extends MSAgentProtocolMessage {
 	data: {
 		error: string;
 	};
+}
+
+export interface MSAgentChangeAgentMessage extends MSAgentProtocolMessage {
+    data: {
+        agent: string;
+    }
 }
