@@ -8,13 +8,10 @@
   ],
   "scripts": {
     "format": "prettier --write **/*.{ts,html,scss}",
-    "build": "yarn workspaces foreach -p -A run build"
+    "build": "bun run build:all"
   },
-  "packageManager": "yarn@4.2.2",
+  "packageManager": "bun@1.1.12",
   "devDependencies": {
-    "@parcel/packager-ts": "2.12.0",
-    "@parcel/transformer-sass": "2.12.0",
-    "@parcel/transformer-typescript-types": "2.12.0",
     "prettier": "^3.3.3",
     "typescript": ">=3.0.0"
   }
