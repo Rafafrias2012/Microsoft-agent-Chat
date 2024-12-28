@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "format": "prettier --write **/*.{ts,html,scss}",
-    "build": "bun run build:all"
+    "build": "bun run build:all",
+    "build:all": "for dir in server webapp protocol msagent.js; do (cd $dir && bun run build); done"
   },
   "packageManager": "bun@1.1.12",
   "devDependencies": {
