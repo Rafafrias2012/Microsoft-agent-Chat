@@ -5,8 +5,8 @@
     "typescript": "^5.5.3"
   },
   "scripts": {
-    "install-deps": "npm install",
-    "build": "npm run install-deps && tsc"
+    "install-deps": "npm ci",
+    "build": "npm run install-deps && npx tsc"
   },
   "main": "./dist/protocol.js",
   "types": "./dist/protocol.d.ts",
