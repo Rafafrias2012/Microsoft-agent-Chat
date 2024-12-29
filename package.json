@@ -1,5 +1,7 @@
 {
   "name": "msagent-chat",
+  "private": true,
+  "type": "module",
   "workspaces": [
     "server",
     "webapp", 
@@ -7,19 +9,28 @@
     "msagent.js"
   ],
   "scripts": {
+    "clean": "rimraf **/dist **/build **/node_modules/.cache",
     "format": "prettier --write \"**/*.{ts,html,scss}\"",
-    "build": "npm run build -w server -w webapp -w protocol -w msagent.js",
-    "start": "ts-node src/index.ts",
-    "dev": "nodemon --exec ts-node src/index.ts"
+    "build": "npm run build --workspaces",
+    "build:server": "cd server && npm run build",
+    "build:webapp": "cd webapp && npm run build",
+    "build:protocol": "cd protocol && npm run build",
+    "start": "npm run start:server",
+    "start:server": "ts-node --esm server/src/index.ts",
+    "dev": "npm run dev:server",
+    "dev:server": "nodemon --exec ts-node --esm server/src/index.ts"
   },
-  "type": "module",
   "packageManager": "npm@10.x",
   "devDependencies": {
     "@types/node": "^20.14.2",
     "nodemon": "^3.1.0",
     "parcel": "^2.12.0",
     "prettier": "^3.3.3",
+    "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
