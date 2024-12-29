@@ -7,9 +7,12 @@
     "msagent.js"
   ],
   "scripts": {
-    "format": "prettier --write **/*.{ts,html,scss}",
-    "build": "yarn workspaces foreach -p -A run build"
-  },
+    "build:webapp": "cd webapp && yarn build",
+    "build:server": "cd server && yarn build",
+    "build:protocol": "cd protocol && yarn build",
+    "build:msagent": "cd msagent.js && yarn build",
+    "build": "yarn build:webapp && yarn build:server && yarn build:protocol && yarn build:msagent"
+  }
   "packageManager": "yarn@4.2.2",
   "devDependencies": {
     "@parcel/packager-ts": "2.12.0",
