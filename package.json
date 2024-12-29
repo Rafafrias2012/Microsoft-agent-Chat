@@ -12,7 +12,7 @@
     "build:protocol": "cd protocol && yarn build",
     "build:msagent": "cd msagent.js && yarn build",
     "build": "yarn build:webapp && yarn build:server && yarn build:protocol && yarn build:msagent"
-  }
+  },
   "packageManager": "yarn@4.2.2",
   "devDependencies": {
     "@parcel/packager-ts": "2.12.0",
