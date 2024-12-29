@@ -1,11 +1,12 @@
 {
   "name": "msagent-chat",
+  {
   "scripts": {
-    "build:webapp": "cd webapp && yarn build",
-    "build:server": "cd server && yarn build",
-    "build:protocol": "cd protocol && yarn build",
-    "build:msagent": "cd msagent.js && yarn build",
-    "build": "yarn build:webapp && yarn build:server && yarn build:protocol && yarn build:msagent"
+    "build:webapp": "cd webapp && yarn run build",
+    "build:server": "cd server && yarn run build",
+    "build:protocol": "cd protocol && yarn run build",
+    "build:msagent": "cd msagent.js && yarn run build",
+    "build": "yarn run build:webapp && yarn run build:server && yarn run build:protocol && yarn run build:msagent"
   },
   "packageManager": "yarn@4.2.2",
   "devDependencies": {
