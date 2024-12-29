@@ -1,11 +1,5 @@
 {
   "name": "msagent-chat",
-  "workspaces": [
-    "server", 
-    "webapp", 
-    "protocol", 
-    "msagent.js"
-  ],
   "scripts": {
     "build:webapp": "cd webapp && yarn build",
     "build:server": "cd server && yarn build",
