@@ -38,7 +38,7 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "itzrafaelsc-microsoft-a-12"
-          entrypoint: "Test"
+          entrypoint: "https://deno.land/std@0.182.0/http/server.ts"
           root: "./"
           
           
