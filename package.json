@@ -1,6 +1,11 @@
 {
     "name": "msagent-chat",
     "scripts": {
+        "start:webapp": "cd webapp && yarn start",
+        "start:server": "cd server && yarn start", 
+        "start:msagent": "cd msagent.js && yarn start",
+        "start:protocol": "cd protocol && yarn start",
+        "start": "concurrently \"yarn start:webapp\" \"yarn start:server\" \"yarn start:msagent\" \"yarn start:protocol\"",
         "build:webapp": "cd webapp && yarn build",
         "build:server": "cd server && yarn build", 
         "build:protocol": "cd protocol && yarn build",
@@ -8,11 +13,16 @@
         "build": "yarn build:webapp && yarn build:server && yarn build:protocol && yarn build:msagent"
     },
     "packageManager": "yarn@4.2.2",
+    "engines": {
+        "node": ">=18.0.0",
+        "yarn": ">=4.0.0"
+    },
     "devDependencies": {
         "@parcel/packager-ts": "2.12.0",
         "@parcel/transformer-sass": "2.12.0", 
         "@parcel/transformer-typescript-types": "2.12.0",
         "prettier": "^3.3.3",
-        "typescript": ">=3.0.0"
+        "typescript": ">=3.0.0",
+        "concurrently": "^8.2.2"
     }
 }
