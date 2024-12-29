@@ -1,28 +1,48 @@
 {
     "name": "msagent-chat",
+    "version": "1.0.0",
+    "main": "dist/index.js",
     "scripts": {
-        "start:webapp": "cd webapp && yarn start",
-        "start:server": "cd server && yarn start", 
-        "start:msagent": "cd msagent.js && yarn start",
-        "start:protocol": "cd protocol && yarn start",
-        "start": "concurrently \"yarn start:webapp\" \"yarn start:server\" \"yarn start:msagent\" \"yarn start:protocol\"",
-        "build:webapp": "cd webapp && yarn build",
-        "build:server": "cd server && yarn build", 
-        "build:protocol": "cd protocol && yarn build",
-        "build:msagent": "cd msagent.js && yarn build",
-        "build": "yarn build:webapp && yarn build:server && yarn build:protocol && yarn build:msagent"
+        "start": "node dist/index.js",
+        "dev": "nodemon --exec ts-node src/index.ts",
+        "build": "tsc",
+        "lint": "eslint . --ext .ts",
+        "test": "jest",
+        "prepare": "husky install"
     },
     "packageManager": "yarn@4.2.2",
     "engines": {
         "node": ">=18.0.0",
         "yarn": ">=4.0.0"
     },
+    "dependencies": {
+        "express": "^4.18.2",
+        "dotenv": "^16.4.5"
+    },
     "devDependencies": {
-        "@parcel/packager-ts": "2.12.0",
-        "@parcel/transformer-sass": "2.12.0", 
-        "@parcel/transformer-typescript-types": "2.12.0",
-        "prettier": "^3.3.3",
-        "typescript": ">=3.0.0",
-        "concurrently": "^8.2.2"
+        "@types/express": "^4.17.21",
+        "@types/jest": "^29.5.12",
+        "@types/node": "^20.11.30",
+        "@typescript-eslint/eslint-plugin": "^7.3.1",
+        "@typescript-eslint/parser": "^7.3.1",
+        "eslint": "^8.57.0",
+        "husky": "^9.0.11",
+        "jest": "^29.7.0",
+        "nodemon": "^3.1.0",
+        "ts-jest": "^29.1.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.3"
+    },
+    "jest": {
+        "preset": "ts-jest",
+        "testEnvironment": "node"
+    },
+    "eslintConfig": {
+        "parser": "@typescript-eslint/parser",
+        "plugins": ["@typescript-eslint"],
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended"
+        ]
     }
 }
