@@ -1,5 +1,5 @@
 {
-    "name": "msagent-chat-monorepo",
+    "name": "msagent-chat",
     "private": true,
     "workspaces": [
         "msagent.js",
@@ -14,11 +14,13 @@
         "test": "npm run test -w msagent.js -w protocol -w server -w webapp",
         "lint": "npm run lint -w msagent.js -w protocol -w server -w webapp"
     },
+    "type": "commonjs",
     "engines": {
         "node": ">=18.0.0",
         "npm": ">=10.0.0"
     },
     "devDependencies": {
+        "@types/node": "^20.11.30",
         "typescript": "^5.4.3",
         "eslint": "^8.57.0"
     }
