@@ -1,23 +1,24 @@
 {
-    "name": "msagent-chat-monorepo",
-    "private": true,
-    "workspaces": [
-        "msagent.js",
-        "protocol",
-        "server", 
-        "webapp"
-    ],
-    "scripts": {
-        "start": "bun run start -w msagent.js -w server -w webapp",
-        "build": "bun run build -w msagent.js -w protocol -w server -w webapp",
-        "dev": "bun run dev -w msagent.js -w server -w webapp",
-        "test": "bun test"
-    },
-    "type": "module",
-    "engines": {
-        "bun": ">=1.0.0"
-    },
-    "devDependencies": {
-        "typescript": "^5.4.3"
-    }
+  "name": "msagent-chat",
+  "workspaces": [
+    "server", 
+    "webapp", 
+    "protocol", 
+    "msagent.js"
+  ],
+  "scripts": {
+    "format": "prettier --write **/*.{ts,html,scss}",
+    "build": "npm run build --workspaces",
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon --exec ts-node src/index.ts"
+  },
+  "packageManager": "npm@10.x",
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "nodemon": "^3.1.0",
+    "parcel": "^2.12.0",
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
 }
