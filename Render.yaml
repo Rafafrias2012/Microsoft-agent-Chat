@@ -1,5 +1,0 @@
-buildCommand: |
-  corepack enable
-  yarn set version 4.2.2
-  yarn install
-  yarn workspaces foreach -p -A run build
